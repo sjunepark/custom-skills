@@ -4,11 +4,10 @@ This reference is intentionally usage-first. It covers how to run `summarize` fo
 
 ## Quick Start
 
-Install and verify:
+Install:
 
 ```bash
 npm i -g @steipete/summarize
-summarize --version
 ```
 
 Run once without installing globally:
@@ -88,7 +87,7 @@ Model precedence:
 ## Troubleshooting
 
 `summarize: command not found`
-- Reinstall and re-run `summarize --version`.
+- Reinstall `@steipete/summarize`, then retry your original command.
 
 `Auth/model errors`
 - Check the API key variable for the selected provider.

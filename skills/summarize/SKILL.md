@@ -11,9 +11,9 @@ Focus on practical usage and command execution, not broad project background.
 ## Workflow
 
 1. Confirm input type and desired output format.
-2. Verify availability with `summarize --version`.
+2. Run a minimal real command first (`summarize "<input>"`).
 3. Select a model/provider and ensure matching API credentials.
-4. Run a minimal command first, then add flags incrementally.
+4. Add flags incrementally only after a baseline run succeeds.
 5. If it fails, re-run with `--verbose` or `--json` before changing multiple variables.
 
 ## Quick Patterns

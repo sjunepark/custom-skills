@@ -1,91 +1,62 @@
-# Summarize CLI Reference
+# Summarize CLI Usage Reference
 
-## Install
+This reference is intentionally usage-first. It covers how to run `summarize` for common tasks and debug failures quickly.
 
-Requires Node 22+.
+## Quick Start
+
+Install and verify:
+
+```bash
+npm i -g @steipete/summarize
+summarize --version
+```
+
+Run once without installing globally:
 
 ```bash
 npx -y @steipete/summarize "https://example.com"
-npm i -g @steipete/summarize
-brew install steipete/tap/summarize
 ```
 
-Verify install:
+## Common Commands
 
 ```bash
-summarize --version
-summarize --help
-```
-
-## Core Command Forms
-
-```bash
+# URL
 summarize "https://example.com"
+
+# Local file
 summarize "/path/to/file.pdf"
-echo "text" | summarize -
+
+# Stdin
+cat notes.md | summarize -
+
+# YouTube/video
+summarize "https://youtu.be/<id>"
 ```
 
-Media and feeds:
+## Pick a Model
 
-```bash
-summarize "https://youtu.be/<id>" --youtube auto
-summarize "https://feeds.npr.org/500005/podcast.xml"
-summarize "/path/to/video.mp4"
-```
-
-## Model and Provider Selection
-
-Use gateway-style ids: `<provider>/<model>`.
+Use `<provider>/<model>` when you need deterministic behavior:
 
 ```bash
 summarize "https://example.com" --model openai/gpt-5-mini
-summarize "https://example.com" --model anthropic/claude-sonnet-4-5
 summarize "https://example.com" --model google/gemini-3-flash-preview
-summarize "https://example.com" --model auto
 ```
 
-OpenRouter-specific:
+Set the matching API key for the provider you use, for example:
 
 ```bash
-summarize "https://example.com" --model openrouter/openai/gpt-5-mini
-summarize refresh-free --set-default
-summarize "https://example.com" --model free
+export OPENAI_API_KEY="..."
 ```
 
-## Environment Variables
-
-Match keys to provider/model:
-
-- `OPENAI_API_KEY`
-- `ANTHROPIC_API_KEY`
-- `GEMINI_API_KEY`
-- `XAI_API_KEY`
-- `NVIDIA_API_KEY`
-- `OPENROUTER_API_KEY`
-- `Z_AI_API_KEY` (or `ZAI_API_KEY`)
-
-Optional service keys/tools:
-
-- `FIRECRAWL_API_KEY`
-- `APIFY_API_TOKEN`
-- `FAL_KEY`
-- `YT_DLP_PATH`
-- `OPENAI_USE_CHAT_COMPLETIONS=1` (OpenAI-compatible toggle)
-
-## High-Value Flags
+## Most Useful Flags
 
 ```bash
---length short|medium|long|xl|xxl|<chars>
+--length short|medium|long|<chars>
 --language <lang>
---max-output-tokens <count>
---json
---verbose
 --extract
 --format md|text
---slides
---slides-ocr
---timeout 2m
---retries 1
+--json
+--verbose
 ```
 
 Examples:
@@ -93,21 +64,17 @@ Examples:
 ```bash
 summarize "https://example.com" --length long --language en
 summarize "https://example.com" --extract --format md
-summarize "https://www.youtube.com/watch?v=<id>" --slides --slides-ocr
 summarize "https://example.com" --json --verbose
 ```
 
-## Config File
+## Defaults via Config
 
-Location: `~/.summarize/config.json`
-
-Minimal example:
+Config path: `~/.summarize/config.json`
 
 ```json
 {
   "model": "openai/gpt-5-mini",
-  "env": { "OPENAI_API_KEY": "sk-..." },
-  "ui": { "theme": "ember" }
+  "env": { "OPENAI_API_KEY": "sk-..." }
 }
 ```
 
@@ -120,22 +87,21 @@ Model precedence:
 
 ## Troubleshooting
 
-`Missing command`
-- Install with npm/Homebrew and re-check `summarize --version`.
+`summarize: command not found`
+- Reinstall and re-run `summarize --version`.
 
-`Provider auth or model errors`
-- Confirm correct API key env var for selected model provider.
-- Retry with `--model auto` or another known-good model.
+`Auth/model errors`
+- Check the API key variable for the selected provider.
+- Retry with a known-good explicit model.
 
-`Website extraction incomplete`
+`Output quality is poor or incomplete`
 - Retry with `--extract --format md`.
-- Configure `FIRECRAWL_API_KEY` and use `--firecrawl auto|always`.
+- Increase detail with `--length long`.
 
-`YouTube/media extraction issues`
+`Need inspectable output`
+- Add `--json` for structured output.
+- Add `--verbose` for detailed logs.
+
+`YouTube/media failures`
 - Ensure `yt-dlp` and `ffmpeg` are installed.
-- Add `tesseract` for `--slides-ocr`.
-- For transcript fallback, set `OPENAI_API_KEY` or `FAL_KEY`.
-
-`Need machine-readable diagnostics`
-- Use `--json`.
-- Add `--verbose` for stderr-level details.
+- For slide OCR flows, install `tesseract` and use `--slides-ocr`.

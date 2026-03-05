@@ -5,21 +5,23 @@ description: Use the steipete/summarize CLI to summarize URLs, local files, stdi
 
 # Summarize CLI
 
-Use `summarize` to extract and summarize web pages, documents, and media from terminal workflows.
+Use this skill to run `summarize` effectively in terminal workflows.
+Focus on practical usage and command execution, not broad project background.
 
 ## Workflow
 
-1. Identify the input type and desired output format.
-2. Verify installation with `summarize --version`.
-3. Configure provider credentials for the selected model.
+1. Confirm input type and desired output format.
+2. Verify availability with `summarize --version`.
+3. Select a model/provider and ensure matching API credentials.
 4. Run a minimal command first, then add flags incrementally.
-5. Use `--verbose` or `--json` for diagnostics when a run fails.
+5. If it fails, re-run with `--verbose` or `--json` before changing multiple variables.
 
 ## Quick Patterns
 
 - Summarize a URL: `summarize "https://example.com"`
 - Summarize a local file: `summarize "/path/to/file.pdf"`
 - Summarize piped input: `cat notes.md | summarize -`
+- Summarize YouTube/media URL: `summarize "https://youtube.com/watch?v=..."`
 - Force model/provider: `summarize "https://example.com" --model openai/gpt-5-mini`
 - Control length: `summarize "https://example.com" --length long`
 - Return diagnostics JSON: `summarize "https://example.com" --json`
@@ -42,6 +44,12 @@ Use `summarize` to extract and summarize web pages, documents, and media from te
 3. Switch to a known-good model (for example `openai/gpt-5-mini` or `google/gemini-3-flash-preview`).
 4. For media or YouTube failures, verify external dependencies (`yt-dlp`, `ffmpeg`, optionally `tesseract`).
 5. Use `--json` to inspect extraction and metric fields.
+
+## Scope
+
+- Prioritize how to run commands and fix concrete failures.
+- Do not include full repository-level documentation unless explicitly requested.
+- Use [references/cli.md](references/cli.md) only for deeper flag/provider details.
 
 ## References
 

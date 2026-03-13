@@ -1,0 +1,4 @@
+interface:
+  display_name: "Post-Implementation Review"
+  short_description: "Cautious review for design flaws and justified refactors after code changes."
+  default_prompt: "Use $post-implementation-review after implementation work when you need to judge whether real code exposed design flaws, abstraction issues, or a refactor worth doing now."

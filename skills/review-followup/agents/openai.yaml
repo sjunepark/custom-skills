@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Follow-Up"
+  short_description: "Validate review comments, then decide whether deeper follow-up is justified."
+  default_prompt: "Use review-followup to assess whether code review comments on a diff, PR, or commit are valid, and only for valid findings decide whether the miss was reasonable or points to missing docs, naming problems, tests, or a small refactor."

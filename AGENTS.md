@@ -16,9 +16,10 @@
 - Inspect project-visible skills with `bunx skills list`.
 - Validate this repo as a local source with `bunx skills add ./skills --list`.
 - Validate one skill directly with `bunx skills add ./skills/<skill-name> --list`.
-- Install one local skill explicitly with `bunx skills add ./skills --skill <skill-name> -a codex -y`.
+- For installs on individual machines, prefer the remote GitHub source so updates stay tied to the repository: `bunx skills add https://github.com/sjunepark/custom-skills --skill <skill-name> -a codex -y`.
+- Use local-path installs only for local validation or unpublished work.
 - Use `-g` only when the task is specifically about a global install.
-- Do not document `bunx skills add . ...` for this repo unless that path is made to work; `./skills` is the local source path that currently validates.
+- Do not document `bunx skills add . ...` for this repo unless that path is made to work; `./skills` is the local validation path that currently works.
 
 ## Editing expectations
 - Prefer editing an existing skill in place over adding new top-level conventions.

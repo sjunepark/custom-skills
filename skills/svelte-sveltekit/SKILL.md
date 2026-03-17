@@ -34,14 +34,22 @@ Do not spend time explaining basic syntax unless the user asks. Focus on archite
 ## Core Svelte Idioms
 
 - Use runes-first patterns in new code: `$state`, `$derived`, `$props`, snippets, and current event syntax.
+- Use `$state` only for values that must participate in reactivity. Keep plain variables plain, and prefer `$state.raw` for large objects or arrays that are replaced wholesale rather than mutated in place.
 - Prefer `$derived` for computed values. Do not use `$effect` to keep one piece of state in sync with another unless there is no better source of truth.
+- Use `$derived.by(...)` when the computation needs multiple statements. Remember that derived objects and arrays are returned as-is rather than made deeply reactive.
 - Treat `$effect` as an escape hatch for external systems, not a general state-management tool.
+- Do not update state inside `$effect` unless you are bridging to something outside Svelte. Prefer direct event handlers, function bindings, `{@attach ...}`, or `createSubscriber(...)` before reaching for an effect.
+- Use `$inspect` and `$inspect.trace(...)` when debugging reactivity instead of leaving logging effects in place.
+- Treat props as live inputs. Derive from them instead of snapshotting them into local variables that will silently drift when the parent changes.
 - Avoid copying props into local mutable state unless the component intentionally forks from the parent value.
 - Prefer explicit component APIs over "smart" components with many optional behaviors.
 - Keep components narrow. Move data loading, auth, and persistence out of leaf UI components.
 - Prefer snippets and explicit children rendering over legacy slot patterns in new code.
+- Top-level snippets can also be referenced from `<script>`, which is often clearer than splitting tiny render helpers into separate components.
+- Prefer `onclick={...}` and other current event attributes. Use `<svelte:window>` or `<svelte:document>` for global listeners instead of wiring them up in `onMount` or `$effect`.
 - Prefer keyed `{#each}` blocks for stable identity. Do not use array index as the key.
 - Avoid destructuring each-block items when the template mutates them.
+- Prefer JS-to-CSS handoff with `style:--token={value}` and CSS custom properties when component state or parents need to influence styling.
 - Prefer CSS custom properties to let parents influence child presentation. Reach for `:global(...)` only when styling third-party output or a boundary you do not control.
 - Prefer `createContext` over ad hoc `setContext`/`getContext` pairs when context is the right tool.
 - Do not default to stores for local sharing. In Svelte 5, a reactive object or class with `$state` fields is often simpler.
@@ -127,11 +135,17 @@ Do not spend time explaining basic syntax unless the user asks. Focus on archite
 - For existing pre-runes code, do not churn files into modern syntax unless the task is migration or the touched code becomes materially clearer.
 - When touching legacy code, prefer local consistency plus small targeted improvements over mixed paradigms inside one file.
 - If introducing a modern pattern into an older area, explain the tradeoff in comments or the summary only when it is not obvious from the diff.
+- Prefer modern replacements in new code: runes over `$:` and `export let`, snippets over slots, direct component references over `<svelte:component>`, and classes with `$state` fields over stores when sharing local reactive state.
+- Use promise-in-template features such as await expressions only when the project is on a compatible Svelte version and has the relevant experimental option enabled.
 
 ## Official References
 
 Consult the current Svelte docs when framework behavior matters or seems version-sensitive:
 - `https://svelte.dev/docs/svelte/best-practices`
+- `https://svelte.dev/docs/svelte/$state`
+- `https://svelte.dev/docs/svelte/$derived`
+- `https://svelte.dev/docs/svelte/$effect`
+- `https://svelte.dev/docs/svelte/$props`
 - `https://svelte.dev/docs/kit/load`
 - `https://svelte.dev/docs/kit/form-actions`
 - `https://svelte.dev/docs/kit/state-management`

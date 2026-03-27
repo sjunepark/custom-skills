@@ -1,0 +1,4 @@
+interface:
+  display_name: "Planning Doc Triad"
+  short_description: "Separate roadmap, TODO, and active plan docs cleanly"
+  default_prompt: "Use $planning-doc-triad whenever a software project needs clearer planning structure. Keep `docs/roadmap.md` for big-picture direction, `TODO.md` for near-term actionable work, and `PLAN.md` for one active detailed plan."

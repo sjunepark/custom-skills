@@ -1,11 +1,13 @@
 ---
 name: planning-doc-triad
-description: "Maintain project planning with three distinct documents: a big-picture roadmap, a near-term TODO list, and one active detailed plan. Use this skill whenever a software or coding project needs planning hygiene, execution structure, backlog cleanup, or a reset of stale planning docs, even if the user only mentions roadmap, todo, priorities, next steps, milestones, implementation plan, or 'what should we work on next.'"
+description: "Maintain project planning with three distinct documents: a big-picture roadmap, a near-term TODO list, and one active detailed plan. Use this skill when the user wants to create, clean up, or reset repository planning docs such as a roadmap, TODO file, or active plan, or when those roles are blurred across existing files. Do not use it for generic requests for priorities, next steps, or an implementation plan unless the user is explicitly asking to update or establish planning documents."
 ---
 
 # Planning Doc Triad
 
-Use three planning documents with non-overlapping roles:
+Use three planning documents with non-overlapping roles.
+If the repo already has canonical files for these roles, reuse them.
+If it does not, default to:
 
 - `docs/roadmap.md`: strategic direction and phased sequencing
 - `TODO.md`: near-term actionable queue
@@ -27,7 +29,7 @@ Use it both for new repos and for cleaning up an existing planning system.
 
 ## Core Rules
 
-### `docs/roadmap.md`
+### Roadmap doc
 
 Use the roadmap for:
 
@@ -42,7 +44,10 @@ Do not use the roadmap for:
 - fine-grained task breakdowns
 - ephemeral notes
 
-### `TODO.md`
+If the repo already has a canonical roadmap file, reuse it.
+Otherwise default to `docs/roadmap.md`.
+
+### Todo doc
 
 Use the todo file for:
 
@@ -58,7 +63,10 @@ Keep it:
 
 Do not turn it into a strategy memo or a storage place for distant ideas.
 
-### `PLAN.md`
+If the repo already has a canonical todo file, reuse it.
+Otherwise default to `TODO.md`.
+
+### Active plan doc
 
 Use the plan file for:
 
@@ -66,9 +74,10 @@ Use the plan file for:
 - one detailed job breakdown
 - current scope, non-goals, steps, and open questions
 
-Keep exactly one active `PLAN.md`.
-Rewrite it freely as the current job changes.
-Do not preserve stale plan history in multiple plan files.
+Keep one clearly active detailed plan file.
+If the repo already has a canonical current-plan location, reuse it instead of adding another root-level plan file.
+Rewrite the active plan freely as the current job changes.
+Do not preserve stale plan history in multiple competing active plan files.
 
 ## Setup Workflow
 
@@ -76,7 +85,7 @@ When introducing this methodology to a repo:
 
 1. Check whether the repo already has a roadmap, todo list, or plan docs.
 2. Reuse existing files when they already match the intended role.
-3. Create missing files in these locations:
+3. If the repo has no established convention for a missing role, create the missing files in these default locations:
    - `docs/roadmap.md`
    - `TODO.md`
    - `PLAN.md`
@@ -87,11 +96,11 @@ When introducing this methodology to a repo:
 
 When updating planning docs during normal work:
 
-1. Update `PLAN.md` first if the current job needs a detailed plan.
-2. Reflect near-term actionable items in `TODO.md`.
-3. Update `docs/roadmap.md` only if priorities, phasing, or major direction changed.
+1. Update the active plan file first if the current job needs a detailed plan.
+2. Reflect near-term actionable items in the todo file.
+3. Update the roadmap file only if priorities, phasing, or major direction changed.
 4. After execution, remove completed todo items and rewrite the active plan for the next job.
-5. If the plan produced durable decisions, persist them outside `PLAN.md`.
+5. If the plan produced durable decisions, persist them outside the active plan file.
 
 ## Writing Standards
 
@@ -138,13 +147,13 @@ Avoid these failure modes:
 - turning the roadmap into a backlog
 - turning the todo file into a strategy memo
 - keeping several plan files for parallel jobs without a clear active one
-- leaving `PLAN.md` as stale history after the job changes
-- storing important product decisions only in `PLAN.md`
+- leaving the active plan file as stale history after the job changes
+- storing important product decisions only in the active plan file
 
 ## Output
 
 When applying this methodology, produce:
 
-- the updated files
+- the updated files, or the new files that were actually needed
 - a short explanation of what each file now owns
 - the current next actions

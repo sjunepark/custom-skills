@@ -1,4 +1,4 @@
 interface:
   display_name: "Planning Doc Triad"
   short_description: "Separate roadmap, TODO, and active plan docs cleanly"
-  default_prompt: "Use $planning-doc-triad when the user wants to create or clean up planning documents in a software project. Reuse the repo's canonical roadmap, todo, and active plan files when they already exist; otherwise default to `docs/roadmap.md`, `TODO.md`, and `PLAN.md`."
+  default_prompt: "Use $planning-doc-triad when the user wants to create or clean up planning documents in a software project. Follow the hierarchy `docs/roadmap.md` -> `TODO.md` -> `PLAN.md`: roadmap for direction, todo for the near-term queue, and plan for the one active todo item being executed. Reuse canonical files when they already exist."

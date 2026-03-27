@@ -14,6 +14,11 @@ If it does not, default to:
 - `PLAN.md`: one active detailed plan for the current job
 
 This structure separates strategy, near-term execution, and active working context.
+Treat it as a hierarchy:
+
+- roadmap sets direction
+- todo holds the near-term candidate queue
+- plan expands the one todo item currently being executed
 
 ## When To Apply It
 
@@ -51,7 +56,9 @@ Otherwise default to `docs/roadmap.md`.
 
 Use the todo file for:
 
+- near-term candidate work
 - active or next-up work
+- unrelated items that could reasonably be worked on soon
 - small actionable items
 - ordered execution priority
 
@@ -62,6 +69,7 @@ Keep it:
 - easy to scan
 
 Do not turn it into a strategy memo or a storage place for distant ideas.
+Do not expand a todo item into a detailed execution document until it becomes the active job.
 
 If the repo already has a canonical todo file, reuse it.
 Otherwise default to `TODO.md`.
@@ -71,11 +79,13 @@ Otherwise default to `TODO.md`.
 Use the plan file for:
 
 - one active initiative
+- the one todo item currently being executed
 - one detailed job breakdown
 - current scope, non-goals, steps, and open questions
 
 Keep one clearly active detailed plan file.
 If the repo already has a canonical current-plan location, reuse it instead of adding another root-level plan file.
+When a todo item becomes the current job, expand it here instead of turning `TODO.md` into prose.
 Rewrite the active plan freely as the current job changes.
 Do not preserve stale plan history in multiple competing active plan files.
 
@@ -96,11 +106,12 @@ When introducing this methodology to a repo:
 
 When updating planning docs during normal work:
 
-1. Update the active plan file first if the current job needs a detailed plan.
-2. Reflect near-term actionable items in the todo file.
-3. Update the roadmap file only if priorities, phasing, or major direction changed.
-4. After execution, remove completed todo items and rewrite the active plan for the next job.
-5. If the plan produced durable decisions, persist them outside the active plan file.
+1. Keep the roadmap file focused on strategic direction, milestones, and sequencing.
+2. Keep the todo file as the ordered near-term queue derived from that direction.
+3. When one todo item becomes the current job and needs detail, expand it into the active plan file.
+4. During execution, update the active plan as scope, steps, or open questions change.
+5. After execution, remove completed items from the todo file, add any new follow-up tasks there, and rewrite the active plan for the next job.
+6. If the plan produced durable decisions, persist them outside the active plan file.
 
 ## Writing Standards
 
@@ -126,13 +137,13 @@ Prefer this structure:
 
 - one short rule line
 - `## Next Up`
-- a flat ordered task list
+- a flat ordered list of near-term candidate tasks
 
 ### `PLAN.md`
 
 Prefer this structure:
 
-- current job
+- current job promoted from `TODO.md`
 - goal
 - in scope
 - out of scope

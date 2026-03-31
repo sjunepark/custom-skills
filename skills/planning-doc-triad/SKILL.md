@@ -81,7 +81,7 @@ Use the plan file for:
 - one active initiative
 - the one todo item currently being executed
 - one detailed job breakdown
-- current scope, non-goals, steps, and open questions
+- current scope, non-goals, and steps
 
 Keep one clearly active detailed plan file.
 If the repo already has a canonical current-plan location, reuse it instead of adding another root-level plan file.
@@ -109,7 +109,7 @@ When updating planning docs during normal work:
 1. Keep the roadmap file focused on strategic direction, milestones, and sequencing.
 2. Keep the todo file as the ordered near-term queue derived from that direction.
 3. When one todo item becomes the current job and needs detail, expand it into the active plan file.
-4. During execution, update the active plan as scope, steps, or open questions change.
+4. During execution, update the active plan as scope or steps change.
 5. After execution, remove completed items from the todo file, add any new follow-up tasks there, and rewrite the active plan for the next job.
 6. If the plan produced durable decisions, persist them outside the active plan file.
 
@@ -148,7 +148,6 @@ Prefer this structure:
 - in scope
 - out of scope
 - work plan
-- open questions
 - exit criteria
 
 ## Anti-Patterns

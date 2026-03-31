@@ -1,0 +1,4 @@
+interface:
+  display_name: "Doc Comment Writer"
+  short_description: "Add high-signal doc comments to source files."
+  default_prompt: "Use $doc-comment-writer whenever documenting code in mentioned files, especially when future maintainers need purpose, contracts, or invariants without reading internal logic."

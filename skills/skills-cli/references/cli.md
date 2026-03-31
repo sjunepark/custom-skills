@@ -15,8 +15,10 @@
 
 For Codex and Claude Code commonly:
 
-- Codex global path: `~/.codex/skills/`
+- Codex global path: `~/.agents/skills/`
 - Claude Code global path: `~/.claude/skills/`
+
+If the same skill `name` exists in more than one discovered location, Codex can show both entries instead of merging them.
 
 ## Practical recipes
 

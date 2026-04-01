@@ -1,0 +1,23 @@
+{
+  "skill_name": "teach",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Use $teach and explain how this feature works end to end. I want the big picture first, then the main runtime flow, then the tricky implementation details. Show snippets inline so I don't have to open my editor.",
+      "expected_output": "A top-down teaching explanation of a feature or flow with embedded snippets, a clear mental model, and relevant implementation details.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Teach me this module in a way that's easy to learn. Explain its role, who calls it, what data it owns, and what assumptions it relies on. If there are important confusing parts, tell me those too. Use snippets, not file references.",
+      "expected_output": "A module-focused lesson covering responsibilities, callers, data flow, invariants, and important confusion points with inline snippets.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "I keep getting lost in how this app uses the framework. Teach me the relevant framework behavior only as much as needed to understand the code here, then connect that back to the implementation with examples.",
+      "expected_output": "A code-grounded explanation that uses only the necessary library or framework context and ties it back to the local implementation with examples or snippets.",
+      "files": []
+    }
+  ]
+}

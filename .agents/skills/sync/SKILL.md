@@ -20,17 +20,19 @@ Always use the skills CLI. Do not install from `.` or `./skills`.
 - Confirm the remote resolves and exposes the expected skills.
 
 3. Install every skill from the remote source.
-- Run `bunx skills add "<remote-url>" --all -y`.
-- Omit `-g` unless the user explicitly asks for a global install.
+- Target both agents by default with `-a codex -a claude-code`.
+- Run `bunx skills add "<remote-url>" --all -a codex -a claude-code -y`.
+- Add `-g` only when the user explicitly asks for a global install.
 
 4. Verify the result.
-- Run `bunx skills list`.
+- Run `bunx skills list` for project scope or `bunx skills list -g` for global scope.
 - Report that the installed skills now come from the remote-backed source, not the local working tree.
 
 ## Guardrails
 
 - Use the current repo's remote URL, not a filesystem path.
 - Prefer `origin` as the canonical remote for this repo.
+- Default to installing for both Codex and Claude Code unless the user narrowed the target agent set.
 - If the remote points somewhere unexpected, show it to the user before installing.
 - If the install command would overwrite existing skills, report that clearly in the summary.
 
@@ -39,7 +41,7 @@ Always use the skills CLI. Do not install from `.` or `./skills`.
 ```bash
 REMOTE_URL="$(git remote get-url origin)"
 bunx skills add "$REMOTE_URL" --list
-bunx skills add "$REMOTE_URL" --all -y
+bunx skills add "$REMOTE_URL" --all -a codex -a claude-code -y
 bunx skills list
 ```
 

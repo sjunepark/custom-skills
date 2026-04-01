@@ -9,6 +9,8 @@ Review the code after the implementation exists. Focus on issues that were hard 
 
 This skill is for cautious design review, not aggressive redesign. A strange-looking design is not enough on its own. Prefer keeping the current structure when the evidence is thin or when hidden constraints could plausibly explain the shape.
 
+It is acceptable for the review to conclude that the implementation is fine. Do not stretch minor discomfort into a flaw just to produce feedback. If the code does not reveal a meaningful design problem, say plainly that there is nothing wrong, nothing worth improving right now, or no post-implementation flaw in the previous implementation.
+
 ## Workflow
 
 1. Anchor the review in the actual change.
@@ -84,6 +86,7 @@ Use this structure when reporting:
   - `No refactor recommended`
   - `Small targeted refactor is justified`
   - `Broader redesign may be warranted, but only after clarifying constraints`
+- A clean review is a valid outcome. If no issue clears the bar, say that explicitly instead of forcing a finding.
 
 ## Snippet Rules
 
@@ -100,6 +103,7 @@ Use this structure when reporting:
 - Prefer file-level or seam-level observations over vague architectural commentary.
 - Do not force the user back into the editor just to follow the review.
 - If there are no meaningful design flaws, say so explicitly.
+- It is fine to say there is nothing wrong, nothing to improve, or no flaw exposed by the implementation.
 - If a concern is plausible but not yet well supported, label it as a watch item rather than a recommendation.
 - Do not manufacture findings to make the review feel useful.
 

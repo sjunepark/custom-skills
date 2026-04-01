@@ -5,7 +5,7 @@ description: Install every skill from the current repository onto the current ma
 
 # Sync
 
-Use this skill to install all skills from the current repository's remote source onto the current machine.
+Use this skill to install all published skills from the current repository's remote `skills/` subpath onto the current machine.
 
 Always use the skills CLI. Do not install from `.` or `./skills`.
 
@@ -14,14 +14,15 @@ Always use the skills CLI. Do not install from `.` or `./skills`.
 1. Confirm the repository remote URL.
 - Run `git remote get-url origin`.
 - If `origin` is missing, stop and tell the user you need a remote URL for this repo.
+- For this repository, convert the remote into the GitHub `skills/` subpath: `https://github.com/sjunepark/custom-skills/tree/main/skills`.
 
 2. Inspect the remote skill source before installing.
-- Run `bunx skills add "<remote-url>" --list`.
-- Confirm the remote resolves and exposes the expected skills.
+- Run `bunx skills add "<skills-subpath-url>" --list`.
+- Confirm the remote resolves and exposes only the published skills from `skills/`.
 
 3. Install every skill from the remote source.
 - Target both agents by default with `-a codex -a claude-code`.
-- Run `bunx skills add "<remote-url>" --all -a codex -a claude-code -y`.
+- Run `bunx skills add "<skills-subpath-url>" --all -a codex -a claude-code -y`.
 - Add `-g` only when the user explicitly asks for a global install.
 
 4. Verify the result.
@@ -30,8 +31,8 @@ Always use the skills CLI. Do not install from `.` or `./skills`.
 
 ## Guardrails
 
-- Use the current repo's remote URL, not a filesystem path.
-- Prefer `origin` as the canonical remote for this repo.
+- Use the current repo's GitHub `skills/` subpath URL, not a filesystem path and not the repo root URL.
+- Prefer the canonical published source `https://github.com/sjunepark/custom-skills/tree/main/skills` for this repo.
 - Default to installing for both Codex and Claude Code unless the user narrowed the target agent set.
 - If the remote points somewhere unexpected, show it to the user before installing.
 - If the install command would overwrite existing skills, report that clearly in the summary.
@@ -39,9 +40,9 @@ Always use the skills CLI. Do not install from `.` or `./skills`.
 ## Command Pattern
 
 ```bash
-REMOTE_URL="$(git remote get-url origin)"
-bunx skills add "$REMOTE_URL" --list
-bunx skills add "$REMOTE_URL" --all -a codex -a claude-code -y
+SKILLS_URL="https://github.com/sjunepark/custom-skills/tree/main/skills"
+bunx skills add "$SKILLS_URL" --list
+bunx skills add "$SKILLS_URL" --all -a codex -a claude-code -y
 bunx skills list
 ```
 

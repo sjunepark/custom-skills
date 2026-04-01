@@ -1,4 +1,4 @@
 interface:
   display_name: "Sync"
-  short_description: "Install all repo skills from the remote URL for Codex and Claude Code"
-  default_prompt: "Use this skill to install every skill from the current repository onto the current machine with bunx skills, using the repository's remote URL instead of a local path and targeting both Codex and Claude Code unless the user says otherwise."
+  short_description: "Install published repo skills from the GitHub skills subpath"
+  default_prompt: "Use this skill to install every published skill from the current repository onto the current machine with bunx skills, using https://github.com/sjunepark/custom-skills/tree/main/skills and targeting both Codex and Claude Code unless the user says otherwise."

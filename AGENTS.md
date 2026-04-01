@@ -21,7 +21,7 @@
 - Use `bunx skills list -g` to inspect user-level global installs.
 - Validate this repo as a local source with `bunx skills add ./skills --list`.
 - Validate one skill directly with `bunx skills add ./skills/<skill-name> --list`.
-- For installs on individual machines, use the remote GitHub source so updates can flow across machines: `bunx skills add https://github.com/sjunepark/custom-skills --skill <skill-name> -a codex -a claude-code -y`.
+- For installs on individual machines, use the GitHub `skills/` subpath so updates can flow across machines without publishing repo-local `.agents/` or `.claude/` skills: `bunx skills add https://github.com/sjunepark/custom-skills/tree/main/skills --skill <skill-name> -a codex -a claude-code -y`.
 - Do not install this repo's skills from the current working tree, `.` or `./skills`, when the goal is to install them for ongoing use on a machine.
 - Use local-path installs only for local validation or unpublished work.
 - Use `-g` only when the task is specifically about a global install. Global installs write to user-level directories such as `~/.agents/skills/` and `~/.claude/skills/`, not this repo's `.agents/` or `.claude/`.

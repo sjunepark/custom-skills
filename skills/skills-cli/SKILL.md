@@ -12,7 +12,7 @@ Use `bunx skills` commands to manage skills.
 1. Inspect current state with `bunx skills list` for project scope and `bunx skills list -g` for global scope.
 2. Use `bunx skills find <query>` or `bunx skills add <source> --list` to discover options.
 3. Install with explicit scope and agent targeting:
-   - For this repository's published skills, use the remote repo URL rather than the current working tree so installs can update across machines.
+   - For this repository's published skills, use `https://github.com/sjunepark/custom-skills/tree/main/skills` rather than the repo root or current working tree so installs can update across machines without exposing repo-local `.agents/` and `.claude/` skills.
    - Global personal setup: `-g -a codex -a claude-code`
    - Project setup: omit `-g`
 4. Verify install with the matching scope command and test a prompt that should trigger the skill.
@@ -39,7 +39,7 @@ Use `bunx skills` commands to manage skills.
 - Use `--yes` only for non-interactive runs.
 - Default to symlink mode unless the user requests `--copy`.
 - `bunx skills list` without `-g` reports project-visible skills for the current directory; do not use it to answer what is globally installed.
-- When installing this repository's skills for regular machine use, do not install from `.` or `./skills`; use `https://github.com/sjunepark/custom-skills`.
+- When installing this repository's skills for regular machine use, do not install from `.` or `./skills`, and do not use the repo root URL; use `https://github.com/sjunepark/custom-skills/tree/main/skills`.
 - Treat installed skills as executable instructions; avoid untrusted sources.
 - If managing dotfiles with chezmoi, avoid `chezmoi add` on live skills directories.
 

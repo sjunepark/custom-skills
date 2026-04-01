@@ -53,6 +53,7 @@ If the user is actually asking about a diff, commit, PR patch, or file-to-file c
 
 3. Use snippets as the primary teaching aid.
 - Embed short, focused snippets directly in the response.
+- Start each snippet with a comment that names the file path it came from.
 - Prefer the smallest snippet that makes the idea legible.
 - Use multiple small snippets to explain separate ideas.
 - Do not force the user back into the editor just to follow the explanation.
@@ -114,12 +115,16 @@ If the user is actually asking about a diff, commit, PR patch, or file-to-file c
 ## Snippet Rules
 
 - Use fenced code blocks for snippets.
+- Put the source file path in the first line of the snippet as a comment.
+- Match the comment style to the language when practical, for example `// src/dashboard/load.ts` or `# backend/jobs/sync.py`.
+- If the language is unclear, use a neutral comment style or label the snippet in surrounding prose.
 - Keep snippets narrowly scoped to the mechanism being taught.
 - Prefer signatures, conditions, branching points, state transitions, and interface boundaries over long contiguous code.
 - When a relationship matters more than the exact syntax, summarize the flow around the snippet in prose.
 - If helpful, pair snippets with a brief explanation like:
 
 ```ts
+// src/dashboard/loadUserDashboard.ts
 export async function loadUserDashboard(userId: string) {
   const account = await accountRepo.getByUserId(userId);
   return buildDashboardView(account);

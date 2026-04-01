@@ -54,6 +54,7 @@ If the user provides another concrete comparison format, adapt the same workflow
 
 4. Use snippets as the primary evidence.
 - Embed short, focused code snippets directly in the response.
+- Start each snippet with a comment that names the file path it came from.
 - Prefer the smallest snippet that makes the point clear.
 - Use multiple small snippets instead of one large dump when several ideas matter.
 - Show `before` and `after` snippets when the contrast helps.
@@ -100,12 +101,16 @@ If the user provides another concrete comparison format, adapt the same workflow
 ## Snippet Rules
 
 - Use fenced code blocks for snippets.
+- Put the source file path in the first line of the snippet as a comment.
+- Match the comment style to the language when practical, for example `// src/auth/session.ts` or `# app/models/user.rb`.
+- If the language is unclear, use a neutral comment style or label the snippet in surrounding prose.
 - Keep each snippet narrowly scoped to the point being explained.
 - Prefer the changed lines plus just enough surrounding context to make them legible.
 - If a long function changed, excerpt the relevant branch, condition, signature, or data shape instead of pasting the whole function.
 - When comparing versions, make the contrast obvious:
 
 ```ts
+// src/auth/session.ts
 // before
 if (!session) return null;
 

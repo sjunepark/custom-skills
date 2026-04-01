@@ -1,0 +1,4 @@
+interface:
+  display_name: "Change Explainer"
+  short_description: "Explain diffs and change sets with embedded snippets and implications"
+  default_prompt: "Use change-explainer when the user wants to understand a diff, unstaged changes, a commit, a PR patch, or two file versions in logical order with embedded snippets instead of file or line references. Focus on what changed, why, how it works, and only surface important concerns when they materially matter."

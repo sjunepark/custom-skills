@@ -1,0 +1,23 @@
+{
+  "skill_name": "change-explainer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Use $change-explainer on my unstaged changes. I don't want a file-by-file recap. Explain the edits in the order that makes the most sense, show the key code snippets inline, and tell me what the behavior change implies for future work.",
+      "expected_output": "A logically ordered explanation of local diff hunks with embedded snippets, implementation explanation, and implications rather than file references.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Walk me through the last commit like I'm reviewing it cold. Focus on the contract changes, how the implementation was reshaped, and any important risks or tradeoffs you think I should notice. Please include snippets so I don't need to open the code.",
+      "expected_output": "An explanatory commit walkthrough centered on behavior, interfaces, implementation, and important concerns, using inline snippets.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "I pasted a PR patch below. Cluster related hunks together, explain what each cluster is doing, and tell me what design decisions are visible from the code. Stay mostly descriptive unless something looks materially risky. Show snippets only.",
+      "expected_output": "A conceptual explanation of a patch grouped by purpose, with snippet-based evidence and restrained judgment.",
+      "files": []
+    }
+  ]
+}

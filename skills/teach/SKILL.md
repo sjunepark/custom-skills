@@ -1,6 +1,6 @@
 ---
 name: teach
-description: Teach the user how code, a subsystem, or a relevant technical concept works in clear learning order, with embedded snippets and diagrams when they materially improve understanding. Use whenever the user asks to be taught a part of the current codebase, a feature flow, an architecture area, a module, an API boundary, a data flow, or a relevant library or framework concept needed to understand the code. Prefer this skill when the user wants explanation, understanding, or guided learning rather than implementation, and when they want snippets instead of file or line references. If the request is specifically about what changed in a diff, commit, or patch, prefer `change-explainer`.
+description: Teach the user how code, a subsystem, or a relevant technical concept works in clear learning order, with embedded snippets and ASCII diagrams when they materially improve understanding. Use whenever the user asks to be taught a part of the current codebase, a feature flow, an architecture area, a module, an API boundary, a data flow, or a relevant library or framework concept needed to understand the code. Prefer this skill when the user wants explanation, understanding, or guided learning rather than implementation, and when they want snippets instead of file or line references. If the request is specifically about what changed in a diff, commit, or patch, prefer `change-explainer`.
 ---
 
 # Teach
@@ -58,14 +58,14 @@ If the user is actually asking about a diff, commit, PR patch, or file-to-file c
 - Use multiple small snippets to explain separate ideas.
 - Do not force the user back into the editor just to follow the explanation.
 
-4. Use diagrams when structure is easier to see than describe.
+4. Use ASCII diagrams when structure is easier to see than describe.
 - Add a small diagram when it materially improves understanding of:
   - control flow
   - data flow
   - component or module relationships
   - state transitions
   - layered architecture or request lifecycles
-- Keep diagrams compact and readable.
+- Keep diagrams compact, readable, and ASCII-only.
 - Do not add a diagram if prose and snippets already make the point clear.
 
 5. Teach relationships, not isolated facts.
@@ -103,7 +103,7 @@ If the user is actually asking about a diff, commit, PR patch, or file-to-file c
 - Reorder the material so the explanation is easy to learn, not so it mirrors file order.
 
 4. Teach with evidence.
-- For each important point, include a small snippet, pseudocode summary, concrete example, or compact diagram when appropriate.
+- For each important point, include a small snippet, pseudocode summary, concrete example, or compact ASCII diagram when appropriate.
 - Explain why the snippet matters.
 - Connect the evidence back to the larger mental model.
 
@@ -136,7 +136,8 @@ This shows the boundary clearly: the function does orchestration, not heavy busi
 ## Diagram Rules
 
 - Use diagrams only when they make the lesson easier to understand.
-- Prefer plain Mermaid or compact ASCII diagrams that render clearly in Markdown.
+- Use compact ASCII diagrams that render clearly in plain Markdown.
+- Do not use Mermaid.
 - Keep them small and purpose-built for one idea.
 - Favor these diagram types:
   - request or event flow
@@ -148,11 +149,8 @@ This shows the boundary clearly: the function does orchestration, not heavy busi
 
 Example:
 
-```mermaid
-flowchart LR
-  Route --> Service
-  Service --> Repo
-  Repo --> DB
+```text
+Route -> Service -> Repo -> DB
 ```
 
 This works when the main teaching problem is ownership or call flow rather than syntax.
@@ -167,7 +165,7 @@ Use this shape unless the user asks for something else:
 ### How It Works
 - Explain the main flow in logical learning order.
 - Use embedded snippets as evidence.
-- Add a compact diagram if it makes the flow or relationships clearer.
+- Add a compact ASCII diagram if it makes the flow or relationships clearer.
 - Focus on roles, boundaries, and movement of control or data.
 
 ### Key Ideas

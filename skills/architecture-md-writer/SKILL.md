@@ -25,7 +25,7 @@ Write architecture docs that give contributors a fast mental model of system sha
 3. Draft the smallest useful document.
 - Explain what the system or module is for, what major parts exist, and how they interact.
 - Prefer concrete file and directory starting points over exhaustive inventories.
-- Use a small ASCII diagram only when it shortens explanation.
+- Use a small ASCII diagram only when it shortens explanation; do not use Mermaid.
 - Choose section names that fit the system instead of forcing a rigid template.
 - Read [references/section-patterns.md](references/section-patterns.md) when choosing sections or shaping a component map.
 

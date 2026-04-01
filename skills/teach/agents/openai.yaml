@@ -1,4 +1,4 @@
 interface:
   display_name: "Teach"
-  short_description: "Teach code, flows, and architecture with snippets and diagrams"
-  default_prompt: "Use teach when the user wants to understand code, a subsystem, a flow, an architecture area, or a relevant library or framework concept in learning order with embedded snippets instead of file or line references. Add a compact diagram when it materially improves understanding of flow, relationships, or state. Focus on building a mental model, and only call out design issues or confusing structure when they materially improve understanding. Prefer change-explainer instead for diffs, commits, and patches."
+  short_description: "Teach code, flows, and architecture with snippets and ASCII diagrams"
+  default_prompt: "Use teach when the user wants to understand code, a subsystem, a flow, an architecture area, or a relevant library or framework concept in learning order with embedded snippets instead of file or line references. Add a compact ASCII diagram when it materially improves understanding of flow, relationships, or state. Do not use Mermaid. Focus on building a mental model, and only call out design issues or confusing structure when they materially improve understanding. Prefer change-explainer instead for diffs, commits, and patches."

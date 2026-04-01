@@ -3,8 +3,8 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "Use $teach and explain how this feature works end to end. I want the big picture first, then the main runtime flow, then the tricky implementation details. Show snippets inline so I don't have to open my editor, and add a simple diagram if that would make the flow easier to follow.",
-      "expected_output": "A top-down teaching explanation of a feature or flow with embedded snippets, a clear mental model, relevant implementation details, and a compact diagram when it materially helps.",
+      "prompt": "Use $teach and explain how this feature works end to end. I want the big picture first, then the main runtime flow, then the tricky implementation details. Show snippets inline so I don't have to open my editor, and add a simple ASCII diagram if that would make the flow easier to follow.",
+      "expected_output": "A top-down teaching explanation of a feature or flow with embedded snippets, a clear mental model, relevant implementation details, and a compact ASCII diagram when it materially helps.",
       "files": []
     },
     {

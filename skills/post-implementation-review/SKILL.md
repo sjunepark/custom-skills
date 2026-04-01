@@ -1,6 +1,6 @@
 ---
 name: post-implementation-review
-description: Review code after implementation work to identify design flaws, abstraction issues, or maintenance risks that only became clear once real code was written. Use whenever the user asks whether a recent change exposed architectural problems, whether an abstraction is fighting the implementation, or whether a refactor is justified. Be conservative and avoid suggesting refactors without concrete evidence of recurring cost or complexity.
+description: Review code after implementation work to identify design flaws, abstraction issues, or maintenance risks that only became clear once real code was written. Use whenever the user asks whether a recent change exposed architectural problems, whether an abstraction is fighting the implementation, or whether a refactor is justified. Prefer embedded snippets with file-path comments over editor-oriented file and line references. Be conservative and avoid suggesting refactors without concrete evidence of recurring cost or complexity.
 ---
 
 # Post-Implementation Review
@@ -62,6 +62,7 @@ Use this structure when reporting:
 ### Findings
 - List only concrete design or abstraction issues supported by the code.
 - For each issue, explain why it became visible after implementation rather than being obvious upfront.
+- Support each issue with a short embedded snippet when existing code is central to the point.
 
 ### Keep As-Is
 - Call out odd-looking choices that should probably remain unchanged for now.
@@ -84,10 +85,20 @@ Use this structure when reporting:
   - `Small targeted refactor is justified`
   - `Broader redesign may be warranted, but only after clarifying constraints`
 
+## Snippet Rules
+
+- When citing existing code, prefer embedded snippets over bare file paths and line numbers.
+- Put the source file path on the first line of each snippet as a comment.
+- Match the comment style to the language when practical, for example `// src/service.ts` or `# backend/jobs/sync.py`.
+- Keep snippets tight and evidence-focused: signatures, branches, translations, ownership boundaries, and repeated glue code are usually enough.
+- Use multiple small snippets instead of one large excerpt when separate points need separate evidence.
+- Use file and line references only when a snippet would add noise or the exact location itself is the point.
+
 ## Communication Rules
 
 - Be direct and specific.
 - Prefer file-level or seam-level observations over vague architectural commentary.
+- Do not force the user back into the editor just to follow the review.
 - If there are no meaningful design flaws, say so explicitly.
 - If a concern is plausible but not yet well supported, label it as a watch item rather than a recommendation.
 - Do not manufacture findings to make the review feel useful.

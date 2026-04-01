@@ -1,4 +1,4 @@
 interface:
   display_name: "Post-Implementation Review"
-  short_description: "Cautious review for design flaws and justified refactors after code changes."
-  default_prompt: "Use $post-implementation-review after implementation work when you need to judge whether real code exposed design flaws, abstraction issues, or a refactor worth doing now."
+  short_description: "Cautious post-implementation design review with snippet-backed evidence."
+  default_prompt: "Use $post-implementation-review after implementation work when you need to judge whether real code exposed design flaws, abstraction issues, or a refactor worth doing now. When citing existing code, prefer short embedded snippets with the source file path on the first line as a comment instead of editor-oriented file and line references."

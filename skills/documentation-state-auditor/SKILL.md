@@ -1,6 +1,6 @@
 ---
 name: documentation-state-auditor
-description: Audit repository docs for confusion between implemented state, intended state, and unresolved questions, then recommend boundaries, structure, and writing rules that fit the project.
+description: Audit repository docs for confusion between implemented state, intended state, and unresolved questions, then recommend boundaries, structure, progressive disclosure, and writing rules that fit the project.
 ---
 
 # Documentation State Auditor
@@ -11,7 +11,7 @@ Use this skill when a repository's docs may blur:
 - what the team intends to build
 - what is still unresolved
 
-The goal is not to enforce one documentation system. The goal is to make those kinds of truth legible with the lightest structure that fits the project.
+The goal is not to enforce one documentation system. The goal is to make those kinds of truth legible with the lightest structure that fits the project, and to make the tree readable enough that readers can move from overview to detail without guesswork.
 
 ## Primary Questions
 
@@ -20,12 +20,15 @@ This skill should answer:
 1. Can a new reader tell what is implemented now versus what is planned?
 2. Which docs currently blur those boundaries?
 3. Is the current organization helping or hurting clarity?
-4. What documentation structure would fit this project with the least maintenance cost?
-5. What concrete edits would most improve clarity right now?
+4. Does the directory tree itself reveal how the docs are organized and where a reader should start?
+5. Can a reader move from broad overview to detailed docs progressively, only loading more detail when needed?
+6. What documentation structure would fit this project with the least maintenance cost?
+7. What concrete edits would most improve clarity right now?
 
 ## Core Principles
 
 - Distinguish kinds of truth before choosing folder structure.
+- Prefer structures that support progressive disclosure from overview to detail.
 - Prefer visible prose and headings over hidden metadata when possible.
 - Optimize for reader comprehension, not documentation purity.
 - Let the methodology vary by project maturity, team size, and documentation volume.
@@ -49,6 +52,7 @@ Do not assume every project needs a separate home for every bucket. Some project
 - Read `AGENTS.md`, `ARCHITECTURE.md`, `README.md`, and the docs index if they exist.
 - Load only the documentation files needed to understand the current documentation contract.
 - List the files that appear to define architecture, workflows, design, or planning.
+- Note whether the tree gives readers a legible path from overview docs into narrower topic or state-specific docs.
 
 2. Reconstruct the actual documentation contract.
 - Determine what the docs are trying to do today, even if the structure does not say it clearly.
@@ -60,6 +64,8 @@ Do not assume every project needs a separate home for every bucket. Some project
 - Look for future-state architecture mixed into current-state onboarding docs.
 - Look for open questions embedded inside target docs.
 - Look for directory names or file names that hide the distinction between current and planned.
+- Look for trees where siblings mix overview docs, deep implementation notes, and planning artifacts without a visible organizing principle.
+- Look for directories that do not tell a reader what gets more specific as they descend.
 - Look for repeated rationale that does not help readers act.
 
 4. Classify each important doc.
@@ -73,6 +79,7 @@ Do not assume every project needs a separate home for every bucket. Some project
   - time-horizon directories such as `current/`, `target/`, and `questions/`
   - topic directories with explicit state sections inside each file
   - a hybrid, if the repository is large enough to justify it
+- Recommend where overview or index documents should live so each branch of the tree makes sense before readers open leaf files.
 - Explain why the chosen shape fits this specific repository.
 
 6. Propose writing rules.
@@ -91,6 +98,8 @@ Use these heuristics when judging documentation quality:
 
 - A new reader can answer "what exists now?" in one or two clicks.
 - A new reader can answer "what are we trying to build?" separately.
+- A new reader can understand the documentation structure by scanning the tree and the first doc at each branch.
+- Parent docs give orientation, while child docs add detail rather than repeating or surprising.
 - Unresolved items are clearly marked and isolated.
 - Architecture docs do not quietly mix implemented behavior and aspirations.
 - The top-level docs tell readers where to start.
@@ -101,6 +110,8 @@ Use these heuristics when judging documentation quality:
 - The repository says it is early-stage, but architecture docs read as if the system already exists.
 - "Open questions" docs contain settled decisions.
 - The folder layout implies stable categories, but the writing inside ignores them.
+- The tree forces readers to open several files before they can tell how docs are organized.
+- Directory depth increases, but scope does not narrow predictably.
 - Metadata or frontmatter carries the truth distinction, but the visible prose does not.
 
 ## Recommended Methodologies
@@ -119,6 +130,7 @@ Approach:
 
 - keep topic docs
 - add explicit sections such as `Current State`, `Target State`, and `Open Questions`
+- ensure the file opens with enough orientation that a reader can decide whether to keep reading or move deeper elsewhere
 
 Trade-offs:
 
@@ -137,6 +149,7 @@ Use when:
 Approach:
 
 - use directories such as `docs/current/`, `docs/target/`, and `docs/questions/`
+- add short index or overview docs where readers need help choosing the right branch
 
 Trade-offs:
 
@@ -156,6 +169,7 @@ Approach:
 
 - organize by topic such as `architecture/`, `database/`, and `workflows/`
 - require visible section boundaries in mixed docs
+- keep parent topic docs lightweight and directional, with deeper files carrying the narrower detail
 
 Trade-offs:
 
@@ -170,6 +184,8 @@ Recommend rules like these when they fit:
 - Use present tense only for implemented reality.
 - Use `will`, `should`, `target`, or equivalent language for intended state.
 - Keep unresolved items in a clearly marked place rather than buried in target docs.
+- At each directory level, make the scope narrower and more specific than the parent.
+- Put orientation near branch points and detail in leaf docs.
 - Keep rationale short and local unless the project truly benefits from decision-history documents.
 - Prefer visible headings over hidden metadata for state distinctions.
 
@@ -187,6 +203,10 @@ Use this shape unless the user asks for something else:
 - Recommend the documentation methodology that best fits this repository.
 - Explain what it gains and what it gives up.
 
+### Reader Path
+- Explain whether the current tree supports progressive disclosure.
+- Recommend the smallest changes that make the navigation path legible.
+
 ### Concrete Changes
 - List the smallest edits that would materially improve clarity.
 
@@ -198,6 +218,7 @@ Use this shape unless the user asks for something else:
 - Prioritize clarity over doctrine.
 - Avoid acting like one documentation pattern is universally correct.
 - Tie every recommendation to the repository's current size, maturity, and risk of confusion.
+- Treat progressive disclosure as a reader-comprehension tool, not a mandate for more folders.
 - If the current structure is already good enough, say so directly and suggest only minimal refinements.
 - If a proposed structure adds maintenance cost, call that out explicitly.
 
@@ -209,6 +230,7 @@ Do not:
 - insist on ADRs or frontmatter status fields by default
 - recommend heavyweight process without evidence the project needs it
 - confuse "more folders" with "better boundaries"
+- assume progressive disclosure always means deeper nesting
 
 ## Example Triggers
 
@@ -217,3 +239,5 @@ Do not:
 - "Do these docs make it obvious what exists now?"
 - "Should this project use `current/` and `target/` directories?"
 - "Find places where design docs read like implemented reality."
+- "Does this documentation tree support progressive disclosure?"
+- "Can a reader understand this docs structure just by looking at the tree?"

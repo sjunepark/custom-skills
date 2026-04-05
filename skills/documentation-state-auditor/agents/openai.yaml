@@ -1,4 +1,4 @@
 interface:
   display_name: "Documentation State Auditor"
-  short_description: "Audit docs for confusion between current, target, and unresolved state."
-  default_prompt: "Use $documentation-state-auditor to review this repository's docs for confusion between implemented state, intended state, and open questions, then recommend the lightest structure and writing rules that fit."
+  short_description: "Audit docs for state confusion and weak progressive disclosure."
+  default_prompt: "Use $documentation-state-auditor to review this repository's docs for confusion between implemented state, intended state, and open questions, then recommend the lightest structure, progressive disclosure, and writing rules that fit."

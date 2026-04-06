@@ -1,7 +1,0 @@
-{
-  "network": {
-    "allowedDomains": [
-      "add-skill.vercel.sh"
-    ]
-  }
-}

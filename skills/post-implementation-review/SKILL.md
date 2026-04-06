@@ -1,6 +1,6 @@
 ---
 name: post-implementation-review
-description: Review code after implementation work to identify design flaws, abstraction issues, or maintenance risks that only became clear once real code was written. Use whenever the user asks whether a recent change exposed architectural problems, whether an abstraction is fighting the implementation, or whether a refactor is justified. Prefer embedded snippets with file-path comments over editor-oriented file and line references. Be conservative and avoid suggesting refactors without concrete evidence of recurring cost or complexity.
+description: Review code after implementation work to identify design flaws, abstraction issues, speculative structure, or maintenance risks that only became clear once real code was written. Use whenever the user asks whether a recent change exposed architectural problems, whether an abstraction is fighting the implementation, whether extra columns/fields/helpers were added without enough benefit, or whether a refactor is justified. Prefer embedded snippets with file-path comments over editor-oriented file and line references. Be conservative and avoid suggesting refactors without concrete evidence of recurring cost or complexity.
 ---
 
 # Post-Implementation Review
@@ -28,6 +28,8 @@ It is acceptable for the review to conclude that the implementation is fine. Do 
 - Data is being reshaped repeatedly between layers.
 - Tests became hard to set up because dependencies or ownership are misplaced.
 - The implementation needed workarounds that will probably repeat.
+- New structure appears to be speculative rather than useful now: extra DB columns, fields, helpers, indirection, or config added for hypothetical future needs without enough present-day payoff.
+- A piece of structure looks unusual at first glance, but clearly improves readability of the current code. Treat that as a reason to keep it, not as speculative overengineering.
 
 3. Keep the refactor bar high.
 - Do not recommend a refactor just because another design looks cleaner in theory.
@@ -49,6 +51,7 @@ Treat these as strong signals for a refactor recommendation:
 - One abstraction claims to hide complexity but instead leaks it to callers.
 - Ownership of data, side effects, or orchestration is ambiguous enough to create likely bugs.
 - The new code had to special-case around an existing interface in a way that will spread.
+- New columns, fields, helpers, or extension points were added mainly for imagined future cases, but they do not simplify the current design enough to earn their cost.
 
 Treat these as weak signals that usually do not justify a refactor by themselves:
 
@@ -56,6 +59,7 @@ Treat these as weak signals that usually do not justify a refactor by themselves
 - A helper or abstraction is slightly misnamed but still usable.
 - There is some duplication, but it is small and isolated.
 - The current design is awkward only for one edge case with no sign of repetition.
+- A helper, small object boundary, or nested module is only used once but materially improves readability, naming, or local comprehension of the current flow.
 
 ## Output
 
@@ -105,6 +109,7 @@ Use this structure when reporting:
 - If there are no meaningful design flaws, say so explicitly.
 - It is fine to say there is nothing wrong, nothing to improve, or no flaw exposed by the implementation.
 - If a concern is plausible but not yet well supported, label it as a watch item rather than a recommendation.
+- Do not treat every extra layer as waste. Readability is a real benefit when the extracted name, object shape, or file boundary makes the code easier to understand.
 - Do not manufacture findings to make the review feel useful.
 
 ## Example Triggers

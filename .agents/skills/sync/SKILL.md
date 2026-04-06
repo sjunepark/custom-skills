@@ -21,19 +21,21 @@ Always use the skills CLI. Do not install from `.` or `./skills`.
 - Confirm the remote resolves and exposes only the published skills from `skills/`.
 
 3. Install every skill from the remote source.
-- Target both agents by default with `-a codex -a claude-code`.
-- Run `bunx skills add "<skills-subpath-url>" --all -a codex -a claude-code -y`.
-- Add `-g` only when the user explicitly asks for a global install.
+- For this repo's normal machine-global setup, target Claude Code + Pi with copy mode: `bunx skills add "<skills-subpath-url>" --all --copy -g -a claude-code -a pi -y`.
+- Use shared `~/.agents/skills` installs only when the user explicitly wants universal multi-harness sharing.
+- If the user asks for a project install instead, omit `-g` and only narrow agents if requested.
 
 4. Verify the result.
 - Run `bunx skills list` for project scope or `bunx skills list -g` for global scope.
+- For the normal machine-global setup, confirm the listing shows `Agents: Claude Code, Pi`, not a broad shared-agent set.
 - Report that the installed skills now come from the remote-backed source, not the local working tree.
 
 ## Guardrails
 
 - Use the current repo's GitHub `skills/` subpath URL, not a filesystem path and not the repo root URL.
 - Prefer the canonical published source `https://github.com/sjunepark/custom-skills/tree/main/skills` for this repo.
-- Default to installing for both Codex and Claude Code unless the user narrowed the target agent set.
+- Default to installing for Claude Code + Pi with `--copy` unless the user explicitly wants another target set.
+- If the user wants `skills list -g` to stay scoped to Claude Code + Pi, do not leave this repo's published skills in `~/.agents/skills`.
 - If the remote points somewhere unexpected, show it to the user before installing.
 - If the install command would overwrite existing skills, report that clearly in the summary.
 
@@ -42,8 +44,8 @@ Always use the skills CLI. Do not install from `.` or `./skills`.
 ```bash
 SKILLS_URL="https://github.com/sjunepark/custom-skills/tree/main/skills"
 bunx skills add "$SKILLS_URL" --list
-bunx skills add "$SKILLS_URL" --all -a codex -a claude-code -y
-bunx skills list
+bunx skills add "$SKILLS_URL" --all --copy -g -a claude-code -a pi -y
+bunx skills list -g
 ```
 
 ## Example Triggers

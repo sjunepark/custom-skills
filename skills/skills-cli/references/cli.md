@@ -17,19 +17,23 @@
 Use it to inspect what the current repo exposes locally.
 Use `bunx skills list -g` to inspect machine-wide global installs.
 
-For Codex and Claude Code commonly:
+For the harnesses used most often in this repo:
 
-- Codex global path: `~/.agents/skills/`
+- Shared universal path used by many harnesses: `~/.agents/skills/`
 - Claude Code global path: `~/.claude/skills/`
+- Pi global path: `~/.pi/agent/skills/`
+- Codex global path: `~/.codex/skills/`
 
-If the same skill `name` exists in more than one discovered location, Codex can show both entries instead of merging them.
+If the same skill `name` exists in more than one discovered location, discovery can show multiple entries instead of merging them. Installs left in the shared `~/.agents/skills/` path can make `skills list -g` report many agents for one skill.
 
 For this repository specifically:
 
 - Use `https://github.com/sjunepark/custom-skills/tree/main/skills` as the normal install source.
 - Prefer that GitHub subpath URL over `.` or `./skills` so installed skills can be updated across multiple machines without publishing repo-local `.agents/` or `.claude/` skills.
 - Use `./skills` only for local validation or unpublished work.
-- If the user asks to install for both Codex and Claude Code, pass `-a codex -a claude-code`.
+- The normal machine-global setup for this repo is Claude Code + Pi only: use `--copy -g -a claude-code -a pi`.
+- That copy-mode install writes directly to `~/.claude/skills/` and `~/.pi/agent/skills/` and keeps `skills list -g` reporting `Agents: Claude Code, Pi`.
+- Do not leave this repo's published machine-global installs in `~/.agents/skills/` unless the user explicitly wants universal multi-harness sharing.
 - If the user asks for a global install, add `-g`; that writes to user-level directories, not repo-local `.agents/` or `.claude/`.
 
 ## Practical recipes
@@ -40,22 +44,53 @@ For this repository specifically:
 bunx skills add https://github.com/sjunepark/custom-skills/tree/main/skills --list
 ```
 
-### Add one skill from this repo to Codex + Claude globally
+### Add one published repo skill to Claude Code + Pi globally
 
 ```bash
-bunx skills add https://github.com/sjunepark/custom-skills/tree/main/skills --skill <skill-name> -g -a codex -a claude-code -y
+bunx skills add https://github.com/sjunepark/custom-skills/tree/main/skills --skill <skill-name> --copy -g -a claude-code -a pi -y
 ```
 
-### Add every published skill from this repo to Codex + Claude globally
+### Add every published repo skill to Claude Code + Pi globally
 
 ```bash
-bunx skills add https://github.com/sjunepark/custom-skills/tree/main/skills --all -g -a codex -a claude-code -y
+bunx skills add https://github.com/sjunepark/custom-skills/tree/main/skills --all --copy -g -a claude-code -a pi -y
 ```
 
-### Add one skill to Codex + Claude globally
+### Reset all published repo skills to Claude Code + Pi only
+
+Use this when older installs in `~/.agents/skills/` or other global agent directories make `skills list -g` report many agents for one skill.
 
 ```bash
-bunx skills add vercel-labs/skills --skill find-skills -g -a codex -a claude-code -y
+SKILLS_URL="https://github.com/sjunepark/custom-skills/tree/main/skills"
+REPO_SKILLS=(
+  agents-md-writer
+  architecture-md-writer
+  briefing
+  change-explainer
+  doc-comment-writer
+  documentation-state-auditor
+  pi-extension-intake
+  post-implementation-review
+  skills-cli
+  source-investigator
+  structure-review
+  summarize
+  svelte-sveltekit
+  tailwind-semantic-theme
+  teach
+)
+
+bunx skills remove "${REPO_SKILLS[@]}" -g -y
+bunx skills add "$SKILLS_URL" --all --copy -g -a claude-code -a pi -y
+bunx skills list -g
+```
+
+### Add one external skill to Claude Code + Pi globally
+
+Use the same copy-mode pattern for non-repo skills when you also want `skills list -g` to show only `Claude Code, Pi` for those installs.
+
+```bash
+bunx skills add vercel-labs/skills --skill find-skills --copy -g -a claude-code -a pi -y
 ```
 
 ### List current installs
@@ -63,14 +98,14 @@ bunx skills add vercel-labs/skills --skill find-skills -g -a codex -a claude-cod
 ```bash
 bunx skills list
 bunx skills list -g
-bunx skills list -g -a codex
+bunx skills list -g -a pi
 bunx skills list -g -a claude-code
 ```
 
 ### Remove a skill globally from both agents
 
 ```bash
-bunx skills remove find-skills -g -a codex -a claude-code -y
+bunx skills remove find-skills -g -a claude-code -a pi -y
 ```
 
 ### Check and update installed skills

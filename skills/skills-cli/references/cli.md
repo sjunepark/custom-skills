@@ -75,7 +75,8 @@ REPO_SKILLS=(
   source-investigator
   structure-review
   summarize
-  svelte-sveltekit
+  svelte
+  sveltekit
   tailwind-semantic-theme
   teach
 )

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Svelte + SvelteKit"
-  short_description: "Use current Svelte 5 and SvelteKit idioms"
-  default_prompt: "Use this skill when building, reviewing, refactoring, or debugging Svelte 5 and SvelteKit code, especially around runes, load functions, form actions, SSR, hydration, routing, and state placement."

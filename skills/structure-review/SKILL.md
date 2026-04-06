@@ -1,13 +1,15 @@
 ---
-name: lean-review
-description: Review code for unnecessary structure, speculative design, and low-value complexity without attacking readability. Use whenever the user asks whether code is overengineered, too abstract, too configurable, too future-proof, whether extra DB columns/fields/helpers should exist, whether a change feels heavier than necessary, or wants help simplifying code while keeping readability benefits such as clear names, small object boundaries, or helpful file structure.
+name: structure-review
+description: Review code structure for both unnecessary complexity and insufficient organization. Use whenever the user asks whether code is overengineered, too abstract, too flat, poorly organized, too configurable, too future-proof, whether extra DB columns/fields/helpers should exist, whether a change feels heavier than necessary, whether modules or directories mix unrelated responsibilities, or wants help simplifying or reorganizing code while keeping readability benefits such as clear names, small object boundaries, or helpful file structure.
 ---
 
-# Lean Review
+# Structure Review
 
-Review code with one question in mind: does each piece of structure earn its keep right now?
+Review code with two questions in mind: does each piece of structure earn its keep right now, and is there missing structure that would make the code easier to navigate and understand?
 
-This skill is for conservative simplification review, not minimalism for its own sake. Do not flatten or remove structure that materially improves readability, naming, local reasoning, or ownership boundaries. A single-use helper, nested directory, or small composed object can be worth keeping when it makes the code easier to understand.
+This skill reviews in both directions. Over-structure (speculative abstractions, premature genericity) hurts because it obscures the real flow. Under-structure (flat directories, mixed responsibilities, everything in one file or one level) hurts because it forces readers to scan unrelated code to find what they need.
+
+Do not flatten or remove structure that materially improves readability, naming, local reasoning, or ownership boundaries. A single-use helper, nested directory, or small composed object can be worth keeping when it makes the code easier to understand.
 
 ## Workflow
 
@@ -18,7 +20,7 @@ This skill is for conservative simplification review, not minimalism for its own
   - readability-oriented structure that pays for itself now
   - speculative or low-value structure added mostly for hypothetical future use
 
-2. Look for lean-review signals.
+2. Look for over-structure signals.
 - Extra DB columns, JSON fields, DTO properties, or config keys that current behavior does not meaningfully use.
 - Helpers or wrappers that mostly forward calls without improving naming, boundaries, or reuse.
 - Extension points, strategy objects, plugin hooks, or flags added for imagined future cases.
@@ -28,7 +30,15 @@ This skill is for conservative simplification review, not minimalism for its own
 - State or persistence added before there is a concrete consumer, producer, or invariant that needs it.
 - Module splits or directory nesting that increase hunting rather than understanding.
 
-3. Check whether the structure earns its cost.
+3. Look for under-structure signals.
+- A directory mixes files with clearly different responsibilities (e.g., data access, UI, validation, and orchestration all at one level with no grouping).
+- A module or file handles multiple unrelated capabilities that a reader must mentally separate.
+- Flat file lists grow long enough that scanning them requires domain knowledge to find a given concern.
+- Related files that change together are scattered across sibling directories rather than co-located.
+- A single-level directory could be split into two or three subdirectories that each name a clear responsibility, making the structure self-documenting.
+- Coding agents tend to default to flat layouts; treat a flat structure as a smell worth investigating, not as automatically correct.
+
+4. Check whether the structure earns its cost.
 Ask what the extra layer buys now:
 - clearer names or call sites
 - a stronger type boundary
@@ -40,11 +50,13 @@ Ask what the extra layer buys now:
 
 If the answer is weak or hypothetical, treat it as a simplification candidate.
 
-4. Keep the simplification bar high.
+5. Keep the change bar high.
 - Do not recommend removal just because something is abstract.
+- Do not recommend nesting just because a directory has many files.
 - Do not punish code for being explicit.
 - Do not treat readability-oriented structure as waste.
 - Recommend simplification only when the extra structure adds recurring maintenance cost, obscures the real flow, or mainly exists for futures the code does not currently need.
+- Recommend reorganization only when the flat layout forces readers to scan unrelated code regularly or when mixed responsibilities create real confusion about where a concern lives.
 
 ## Review Standard
 
@@ -57,6 +69,13 @@ Treat these as strong signals that code may be too heavy:
 - A single implementation is wrapped in extension machinery that has no concrete second use in sight.
 - The current feature became harder to follow because the design optimized for hypothetical later work instead of today's path.
 
+Treat these as strong signals that code may be too flat or disorganized:
+
+- A directory has 10+ files spanning three or more unrelated concerns with no subdirectory grouping.
+- A module's public surface mixes capabilities a caller must mentally filter to find the one they need.
+- Files that always change together live far apart in the tree while unrelated files are adjacent.
+- The filesystem tree does not communicate the project's major concerns; a new reader cannot predict where to look.
+
 Treat these as signs to keep the current structure:
 
 - A single-use helper materially improves the signature, name, or readability of the call site.
@@ -64,25 +83,26 @@ Treat these as signs to keep the current structure:
 - Nested modules or directories help a reader predict where responsibility lives.
 - A wrapper isolates awkward dependency details or side effects behind a clearer seam.
 - A little duplication is cheaper than a shared abstraction, but the current structure is still locally clear.
+- A flat directory has few files and each file's name clearly signals its purpose; adding subdirectories would just add clicks.
 
 ## Output
 
 Use this structure when reporting:
 
 ### Findings
-- List only concrete speculative or low-value complexity issues supported by the code.
-- For each issue, explain why the structure does not appear to earn its cost right now.
-- Support each issue with a short embedded snippet when the code itself is central to the point.
+- List only concrete structural issues supported by the code, whether over-structure or under-structure.
+- For each issue, explain why the current shape does not appear to earn its cost or why missing structure hurts navigation.
+- Support each issue with a short embedded snippet or directory listing when the code itself is central to the point.
 
 ### Keep As-Is
-- Call out choices that may look heavy at first glance but are worth keeping for readability, naming, or boundary clarity.
+- Call out choices that may look heavy or flat at first glance but are worth keeping.
 - Say what benefit they provide now.
 
-### Simplification Candidates
+### Restructure Candidates
 - Include only changes that clear the bar above.
 - For each one, state:
-  - the smallest reasonable simplification
-  - what it would remove or collapse
+  - the smallest reasonable change (simplify, reorganize, split, or merge)
+  - what it would remove, collapse, or regroup
   - what would be gained
   - what could be lost
   - why now is or is not the right time
@@ -92,9 +112,9 @@ Use this structure when reporting:
 
 ### Verdict
 - End with one of:
-  - `Already lean enough`
-  - `Small simplification is justified`
-  - `Broader simplification may help, but only after clarifying constraints`
+  - `Structure is appropriate`
+  - `Small restructure is justified`
+  - `Broader reorganization may help, but only after clarifying constraints`
 
 ## Snippet Rules
 
@@ -118,3 +138,6 @@ Use this structure when reporting:
 - "Can you review this diff for speculative code or unnecessary abstractions?"
 - "I want this implementation to stay lean. What should we remove, if anything?"
 - "Check whether this new schema and helper layer is earning its keep."
+- "This directory is getting hard to navigate. Should we reorganize?"
+- "Is this too flat? Should we add subdirectories?"
+- "Review the file/module organization for mixed responsibilities."

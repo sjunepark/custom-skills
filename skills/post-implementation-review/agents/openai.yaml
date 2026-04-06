@@ -1,4 +1,4 @@
 interface:
   display_name: "Post-Implementation Review"
-  short_description: "Cautious post-implementation design review for real design flaws, speculative structure, and refactors worth doing now."
-  default_prompt: "Use $post-implementation-review after implementation work when you need to judge whether real code exposed design flaws, abstraction issues, speculative columns/fields/helpers, or a refactor worth doing now. Treat readability-oriented structure as a benefit when it clearly helps comprehension. When citing existing code, prefer short embedded snippets with the source file path on the first line as a comment instead of editor-oriented file and line references."
+  short_description: "Cautious post-implementation design review for real design flaws and refactors worth doing now."
+  default_prompt: "Use $post-implementation-review after implementation work when you need to judge whether real code exposed design flaws, abstraction issues, or a refactor worth doing now. For speculative structure, over-engineering, or organization concerns, delegate to $structure-review. When citing existing code, prefer short embedded snippets with the source file path on the first line as a comment instead of editor-oriented file and line references."

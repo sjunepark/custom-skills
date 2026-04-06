@@ -1,4 +1,0 @@
-interface:
-  display_name: "Lean Review"
-  short_description: "Conservative review for speculative code and low-value complexity."
-  default_prompt: "Use $lean-review whenever you need to judge whether code is overbuilt, speculative, or carrying extra columns, fields, helpers, options, wrappers, or abstractions without enough present-day benefit. Preserve readability-oriented structure when it clearly helps comprehension, naming, or boundaries."

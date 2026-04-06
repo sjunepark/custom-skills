@@ -1,6 +1,6 @@
 ---
 name: post-implementation-review
-description: Review code after implementation work to identify design flaws, abstraction issues, or maintenance risks that only became clear once real code was written. Use whenever the user asks whether a recent change exposed architectural problems, whether an abstraction is fighting the implementation, or whether a refactor is justified. Prefer embedded snippets with file-path comments over editor-oriented file and line references. Be conservative and avoid suggesting refactors without concrete evidence of recurring cost or complexity.
+description: Review code after implementation work to identify design flaws, abstraction issues, maintenance risks, or structure problems that only became clear once real code was written. Use whenever the user asks whether a recent change exposed architectural problems, whether an abstraction is fighting the implementation, whether code now looks overengineered or too flat, or whether a refactor is justified. Prefer embedded snippets with file-path comments over editor-oriented file and line references. Be conservative and avoid suggesting refactors without concrete evidence of recurring cost or complexity.
 ---
 
 # Post-Implementation Review
@@ -28,6 +28,8 @@ It is acceptable for the review to conclude that the implementation is fine. Do 
 - Data is being reshaped repeatedly between layers.
 - Tests became hard to set up because dependencies or ownership are misplaced.
 - The implementation needed workarounds that will probably repeat.
+- The implementation introduced speculative structure that current behavior barely uses: extra fields, hooks, wrappers, options, or generic layers.
+- The feature now feels too flat or mixed: readers must scan unrelated files or responsibilities to follow one concern.
 
 3. Keep the refactor bar high.
 - Do not recommend a refactor just because another design looks cleaner in theory.
@@ -73,7 +75,7 @@ Use this structure when reporting:
 ### Refactor Candidates
 - Include only changes that clear the bar above.
 - For each one, state:
-  - the smallest reasonable refactor scope
+  - the smallest reasonable refactor or reorganization scope
   - what it would improve
   - what it would cost or risk
   - why now is or is not the right time
@@ -109,7 +111,36 @@ Use this structure when reporting:
 
 ## Structure and Complexity Concerns
 
-For questions about speculative structure, unnecessary complexity, over-engineering, flat organization, or mixed responsibilities, delegate to the [structure-review](https://github.com/sjunepark/custom-skills/tree/main/skills/structure-review) skill instead of duplicating its guidance here.
+When a post-implementation review also raises questions about speculative structure, unnecessary complexity, over-engineering, flat organization, or mixed responsibilities, review those concerns inline here instead of delegating elsewhere.
+
+Check structure in both directions:
+- Over-structure: extra fields, config keys, DTO properties, wrappers, extension points, strategy objects, mode switches, or mapping layers that current behavior does not meaningfully use.
+- Under-structure: flat directories mixing unrelated concerns, modules handling multiple capabilities at once, or related files scattered in ways that make one feature harder to follow.
+
+Keep the bar high:
+- Do not remove structure that already improves naming, local reasoning, ownership boundaries, or filesystem-level comprehension.
+- Do not add nesting just because a directory has many files.
+- Treat readability-oriented helpers, small composed objects, and clear subdirectories as legitimate value even when they are single-use.
+- Recommend simplification or reorganization only when the current shape adds recurring maintenance cost, obscures the real flow, or forces readers to scan unrelated code to follow one concern.
+
+Treat these as strong signals:
+- A new field, option, or hook exists mostly for hypothetical future cases.
+- A helper or abstraction adds another jump without improving naming, boundaries, invariants, or reuse.
+- Callers still need to know internal details the abstraction claimed to hide.
+- One concept now requires repeated mapping or translation just to preserve genericity.
+- The filesystem or module layout no longer helps a reader predict where a concern lives.
+
+Treat these as weak signals:
+- The code is a bit inelegant but still locally understandable.
+- A helper is slightly misnamed but still usable.
+- There is some duplication, but it is small and isolated.
+- A flat directory is still small and each file name clearly signals its purpose.
+
+When these concerns matter, keep using the same report structure:
+- Put only code-supported structural issues in `Findings`.
+- Use `Keep As-Is` for structure that pays for itself now.
+- Use `Refactor Candidates` for the smallest worthwhile simplification or reorganization.
+- If the implementation is structurally fine, say so plainly.
 
 ## Example Triggers
 
@@ -117,3 +148,5 @@ For questions about speculative structure, unnecessary complexity, over-engineer
 - "Did this change reveal any abstraction problems?"
 - "Should we refactor this now, or leave it alone?"
 - "Review this implementation and tell me if the current design will age poorly."
+- "Now that this is implemented, is the structure earning its keep or did we overbuild it?"
+- "This feature works, but did the implementation reveal that the module layout is too flat or mixed?"

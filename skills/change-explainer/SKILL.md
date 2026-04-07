@@ -1,18 +1,18 @@
 ---
 name: change-explainer
-description: Explain a code or document change set in logical teaching order, with embedded snippets and clear implications. Use whenever the user wants help understanding a `git diff`, unstaged changes, a commit, commit range, PR patch, or two versions of a file, especially when they ask what changed, why it changed, how it works, what design decisions are visible, or what the change implies. Prefer this skill when the user wants snippets instead of file or line references, even if they only ask "walk me through this diff" or "help me understand these changes."
+description: Teach a code or document change set in clear learning order, with embedded snippets, before/after contrasts, and clear implications. Use whenever the user wants help understanding a `git diff`, unstaged changes, a commit, commit range, PR patch, or two versions of a file or document, especially when they want a guided walkthrough that starts with the big picture and then explains why and how the patch works. Prefer this skill when the user wants snippets instead of file or line references, even if they only ask "walk me through this diff" or "help me understand these changes."
 ---
 
 # Change Explainer
 
-Explain the change itself, not just the patch mechanics.
+Teach the change, not just the patch mechanics.
 
 The goal is to help the user understand:
-- what changed
-- why the change likely exists
-- how it was implemented
-- what design decisions or tradeoffs are visible
-- what important implications follow from it
+- what problem or purpose the change seems to address
+- what changed at a high level
+- how the important edits fit together
+- how control flow, data flow, or contracts changed
+- what implications matter for readers, callers, or future changes
 
 This is primarily an explanatory skill. Do not turn it into a code review by default. Offer opinions only when the change appears to introduce a material issue or an important tradeoff the user should know about.
 
@@ -30,29 +30,39 @@ If the user provides another concrete comparison format, adapt the same workflow
 
 ## Core Behavior
 
-1. Anchor on the actual change.
+1. Start from the reader's question.
+- Identify what the user is trying to understand about the change, not just which files moved.
+- Match the depth to the request.
+- If the user asks broadly, narrow to the smallest useful mental model first.
+
+2. Build a mental model before hunk details.
+- Begin with the patch's purpose, scope, or visible behavior change.
+- Then explain the main implementation flow.
+- Then cover supporting edits such as helpers, tests, docs, or cleanup.
+- Avoid starting with file-by-file or hunk-by-hunk narration unless the user explicitly wants that.
+
+3. Anchor on the actual change.
 - Read the diff first.
-- Then read the surrounding code, tests, and nearby docs only where needed to explain intent and implications.
+- Then read surrounding code, tests, and nearby docs only where needed to explain intent, ownership, or invariants.
 - Do not speculate about the design before checking the code around the changed hunk.
 
-2. Reorder the explanation for comprehension.
+4. Reorder the explanation for comprehension.
 - Do not explain hunks in raw diff order unless the diff is already easy to follow.
 - Group related edits into a small number of conceptual changes.
 - Prefer an order like:
+  - what this patch is trying to accomplish
   - user-visible behavior
   - interface or contract changes
-  - control-flow or state changes
+  - main control-flow or state changes
   - data model or persistence changes
   - tests and docs
 
-3. Teach the implementation, not just the outcome.
-- For each conceptual change, explain:
-  - what changed
-  - why this part likely changed
-  - how the implementation now works
-  - what this implies for behavior, maintenance, or future changes
+5. Teach relationships, not isolated hunks.
+- Explain how edits connect across files.
+- Show who calls what, where decisions moved, and how data or state now flows differently.
+- If responsibilities were split, merged, or renamed, make that relationship explicit.
 
-4. Use snippets as the primary evidence.
+6. Use snippets as the primary evidence.
 - Embed short, focused code snippets directly in the response.
 - Start each snippet with a comment that names the file path it came from.
 - Prefer the smallest snippet that makes the point clear.
@@ -60,7 +70,16 @@ If the user provides another concrete comparison format, adapt the same workflow
 - Show `before` and `after` snippets when the contrast helps.
 - Do not send the user to file paths or line numbers unless they explicitly ask for references.
 
-5. Separate explanation from judgment.
+7. Use ASCII diagrams when flow is easier to see than describe.
+- Add a compact ASCII diagram when it materially improves understanding of:
+  - control flow across changed components
+  - data flow before vs after
+  - ownership or boundary changes
+  - state transitions affected by the patch
+- Keep diagrams compact, readable, and ASCII-only.
+- Do not add a diagram if prose and snippets already make the point clear.
+
+8. Separate explanation from judgment.
 - Stay mainly descriptive.
 - Add judgment only for issues that look important enough to change how the user should read the patch:
   - correctness risk
@@ -85,16 +104,22 @@ If the user provides another concrete comparison format, adapt the same workflow
 - Split one large diff into separate conceptual changes when it mixes different concerns.
 - Name each bucket by its purpose, not by the file it touched.
 
-4. Explain each bucket in teaching order.
-- Start from the highest-level behavior change.
-- Then move down into how the implementation supports it.
-- If tests clarify the contract, include them near the end of that bucket rather than as an afterthought.
+4. Organize the explanation as a lesson.
+- Start with the highest-level purpose of the patch.
+- Then move through the main behavior or contract changes.
+- Then explain the supporting implementation details that make those changes work.
+- Keep tests and docs near the concept they validate rather than treating them as a disconnected appendix.
 
-5. Call out implications.
+5. Teach with evidence.
+- For each conceptual change, include a small snippet, before/after contrast, pseudocode summary, or compact ASCII diagram when appropriate.
+- Explain why the snippet matters.
+- Connect the evidence back to the larger mental model of the patch.
+
+6. Close with implications.
 - Mention what the change means for callers, operators, maintainers, or future edits.
 - Label inferences as inferences when they are not directly stated in the code or tests.
 
-6. Add warnings only when warranted.
+7. Add warnings only when warranted.
 - If a critical or important issue stands out, include it in a compact note.
 - Do not pad the answer with minor style opinions or speculative nitpicks.
 
@@ -120,17 +145,44 @@ if (!session || session.expiresAt < now) return null;
 
 - If the exact old code is unavailable, show the current code and explain the inferred delta without pretending to quote the previous version.
 
+## Diagram Rules
+
+- Use diagrams only when they make the patch easier to understand.
+- Use compact ASCII diagrams that render clearly in plain Markdown.
+- Do not use Mermaid.
+- Keep them small and purpose-built for one idea.
+- Favor these diagram types:
+  - before/after flow
+  - module relationship map
+  - state transition sketch
+  - data transformation pipeline
+- Put the diagram near the explanation it supports.
+- Explain the diagram briefly instead of assuming it is self-explanatory.
+
+Example:
+
+```text
+Before: Route -> Repo
+After:  Route -> Service -> Repo
+```
+
+This works when the important change is a new ownership boundary rather than a line-by-line code delta.
+
 ## Output Shape
 
 Use this shape unless the user asks for something else:
 
-### What Changed
-- One short paragraph on the overall change and its purpose.
+### Big Picture
+- One short paragraph on what this patch is trying to do and where it matters.
 
-### Walkthrough
-- Explain each conceptual change in logical order.
+### How the Change Works
+- Explain each conceptual change in logical learning order.
 - Use embedded snippets as evidence.
-- For each one, cover the implementation and the implication.
+- Add a compact ASCII diagram if it makes the flow or relationships clearer.
+- Focus on behavior, boundaries, and movement of control or data.
+
+### Key Ideas
+- Call out the few abstractions, invariants, contracts, or design decisions that make the patch make sense.
 
 ### Important Implications
 - List only the consequences that materially affect usage, behavior, compatibility, testing, or maintenance.
@@ -141,17 +193,20 @@ Use this shape unless the user asks for something else:
 
 ## Communication Rules
 
-- Optimize for understanding, not completeness.
-- Prefer a few well-chosen conceptual sections over file-by-file narration.
+- Optimize for learning, not exhaustiveness.
+- Prefer a coherent lesson over a file-by-file or hunk-by-hunk tour.
+- Do not default to flat bullet lists like "change 1, change 2, change 3" unless the user explicitly wants a recap.
 - Do not default to review language like "finding" or "severity" unless the user explicitly wants review mode.
 - Do not mention file names or line numbers as the primary navigation aid.
 - Keep the explanation concrete enough that the user does not need to open an editor just to follow the answer.
 - When inferring intent or tradeoffs, say that you are inferring from the change.
+- If the user seems to want a concise overview, stay high-level.
+- If the user clearly wants deeper teaching, go further into mechanisms and tradeoffs.
 
 ## Example Triggers
 
 - "Walk me through my unstaged changes and explain them in an order that makes sense."
-- "Explain this diff like I'm joining the review late."
-- "I want to understand what changed, why, and how it works now. Show snippets, not file references."
-- "Compare these two versions and tell me what the implementation change implies."
-- "Teach me this commit, including the design decisions visible in the patch."
+- "Explain this diff like I'm joining the review late. Start with the big picture, then show me how the patch works."
+- "I don't want a file-by-file recap. Teach me this commit with snippets."
+- "Compare these two versions and explain the implementation change in the easiest order to learn."
+- "Help me understand what changed, why, and what it implies. Show snippets, not file references."

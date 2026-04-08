@@ -32,7 +32,8 @@ For this repository specifically:
 - Prefer that GitHub subpath URL over `.` or `./skills` so installed skills can be updated across multiple machines without publishing repo-local `.agents/` or `.claude/` skills.
 - Use `./skills` only for local validation or unpublished work.
 - If you want to sync a just-edited skill using the GitHub `skills/` URL, commit and push first; otherwise the remote install will not contain the local changes.
-- The normal machine-global setup for this repo is Claude Code + Pi only: use `--copy -g -a claude-code -a pi`.
+- The normal machine-global setup for this repo is Claude Code + Pi only: use `--skill '*' --copy -g -a claude-code -a pi -y`.
+- Do not use `--all` for that setup. In the current `skills` CLI, `--all` expands to `--skill '*' --agent '*' -y`, which overrides the Claude Code + Pi restriction and recreates shared `~/.agents/skills` installs.
 - That copy-mode install writes directly to `~/.claude/skills/` and `~/.pi/agent/skills/` and keeps `skills list -g` reporting `Agents: Claude Code, Pi`.
 - Do not leave this repo's published machine-global installs in `~/.agents/skills/` unless the user explicitly wants universal multi-harness sharing.
 - If the user asks for a global install, add `-g`; that writes to user-level directories, not repo-local `.agents/` or `.claude/`.
@@ -61,7 +62,7 @@ bunx skills add https://github.com/sjunepark/custom-skills/tree/main/skills --sk
 Commit and push first if the published repo skills were edited locally and those edits should be included in the reinstall.
 
 ```bash
-bunx skills add https://github.com/sjunepark/custom-skills/tree/main/skills --all --copy -g -a claude-code -a pi -y
+bunx skills add https://github.com/sjunepark/custom-skills/tree/main/skills --skill '*' --copy -g -a claude-code -a pi -y
 ```
 
 ### Reset all published repo skills to Claude Code + Pi only
@@ -90,7 +91,7 @@ REPO_SKILLS=(
 )
 
 bunx skills remove "${REPO_SKILLS[@]}" -g -y
-bunx skills add "$SKILLS_URL" --all --copy -g -a claude-code -a pi -y
+bunx skills add "$SKILLS_URL" --skill '*' --copy -g -a claude-code -a pi -y
 bunx skills list -g
 ```
 

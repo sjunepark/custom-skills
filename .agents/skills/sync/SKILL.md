@@ -25,7 +25,8 @@ Always use the skills CLI. Do not install from `.` or `./skills`.
 - Confirm the remote resolves and exposes only the published skills from `skills/`.
 
 4. Install every skill from the remote source.
-- For this repo's normal machine-global setup, target Claude Code + Pi with copy mode: `bunx skills add "<skills-subpath-url>" --all --copy -g -a claude-code -a pi -y`.
+- For this repo's normal machine-global setup, target Claude Code + Pi with copy mode: `bunx skills add "<skills-subpath-url>" --skill '*' --copy -g -a claude-code -a pi -y`.
+- Do not use `--all` for that setup. In the current `skills` CLI, `--all` expands to both `--skill '*'` and `--agent '*'`, which overrides the Claude Code + Pi agent restriction and recreates shared `~/.agents/skills` installs.
 - Use shared `~/.agents/skills` installs only when the user explicitly wants universal multi-harness sharing.
 - If the user asks for a project install instead, omit `-g` and only narrow agents if requested.
 
@@ -39,7 +40,7 @@ Always use the skills CLI. Do not install from `.` or `./skills`.
 - Use the current repo's GitHub `skills/` subpath URL, not a filesystem path and not the repo root URL.
 - If the desired skill changes are only local, stop and ask the user to commit and push before syncing from the remote URL.
 - Prefer the canonical published source `https://github.com/sjunepark/custom-skills/tree/main/skills` for this repo.
-- Default to installing for Claude Code + Pi with `--copy` unless the user explicitly wants another target set.
+- Default to installing for Claude Code + Pi with `--skill '*' --copy -g -a claude-code -a pi -y` unless the user explicitly wants another target set.
 - If the user wants `skills list -g` to stay scoped to Claude Code + Pi, do not leave this repo's published skills in `~/.agents/skills`.
 - If the remote points somewhere unexpected, show it to the user before installing.
 - If the install command would overwrite existing skills, report that clearly in the summary.
@@ -49,7 +50,7 @@ Always use the skills CLI. Do not install from `.` or `./skills`.
 ```bash
 SKILLS_URL="https://github.com/sjunepark/custom-skills/tree/main/skills"
 bunx skills add "$SKILLS_URL" --list
-bunx skills add "$SKILLS_URL" --all --copy -g -a claude-code -a pi -y
+bunx skills add "$SKILLS_URL" --skill '*' --copy -g -a claude-code -a pi -y
 bunx skills list -g
 ```
 

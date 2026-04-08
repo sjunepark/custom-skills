@@ -25,7 +25,7 @@ Use `bunx skills` commands to manage skills.
 - `bunx skills add <package-or-url>`
 - `bunx skills add <source> --skill <name> -a <agent> [-g] -y`
 - `bunx skills add <source> --all`
-- `bunx skills add <source> --all --copy -g -a claude-code -a pi -y`
+- `bunx skills add <source> --skill '*' --copy -g -a claude-code -a pi -y`
 - `bunx skills list [-g] [-a <agent>]`
 - `bunx skills find [query]`
 - `bunx skills remove [skill...] [-g] [-a <agent>]`
@@ -42,7 +42,8 @@ Use `bunx skills` commands to manage skills.
 - Default to symlink mode unless the user requests `--copy` or the goal is this repo's normal machine-global Claude Code + Pi setup.
 - `bunx skills list` without `-g` reports project-visible skills for the current directory; do not use it to answer what is globally installed.
 - When installing this repository's skills for regular machine use, do not install from `.` or `./skills`, and do not use the repo root URL; use `https://github.com/sjunepark/custom-skills/tree/main/skills`.
-- If the user wants `skills list -g` to show only `Agents: Claude Code, Pi` for this repo's published skills, do not leave those installs in `~/.agents/skills`; install them with `--copy -g -a claude-code -a pi`.
+- If the user wants `skills list -g` to show only `Agents: Claude Code, Pi` for this repo's published skills, do not leave those installs in `~/.agents/skills`; install them with `--skill '*' --copy -g -a claude-code -a pi -y`.
+- Do not use `--all` for that setup. In the current `skills` CLI, `--all` expands to `--skill '*' --agent '*' -y`, which overrides the Claude Code + Pi restriction and recreates shared `~/.agents/skills` installs.
 - Treat installed skills as executable instructions; avoid untrusted sources.
 - If managing dotfiles with chezmoi, avoid `chezmoi add` on live skills directories.
 

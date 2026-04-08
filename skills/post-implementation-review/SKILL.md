@@ -1,9 +1,11 @@
 ---
 name: post-implementation-review
-description: Review implemented code for design flaws, abstraction issues, structural problems, or refactors that only became clear in real code. Use when a recent change may have exposed architectural problems, over- or under-structure, or whether a refactor is worth doing now. Prefer embedded snippets with file-path comments over editor-oriented file and line references. Default toward credible design or readability improvements, call out real tradeoffs, and separate straightforward recommendations from items worth discussion.
+description: Manually review already-implemented code for design flaws, abstraction issues, structural problems, or refactors that only became clear in real code. Use only when the user explicitly asks for a post-implementation review, explicitly asks whether recent implementation work revealed design or structure problems, or explicitly wants refactor recommendations after the code exists. Do not auto-trigger for ordinary implementation, debugging, explanation, or generic code review requests. Prefer embedded snippets with file-path comments over editor-oriented file and line references. Default toward credible design or readability improvements, call out real tradeoffs, and separate straightforward recommendations from items worth discussion.
 ---
 
 # Post-Implementation Review
+
+Use this skill manually. Do not invoke it unless the user explicitly asks for a post-implementation review or explicitly asks whether implemented code should now be refactored.
 
 Review the code after the implementation exists. Focus on issues that were hard to see upfront and only became obvious once the change touched real interfaces, control flow, state, tests, or module boundaries.
 

@@ -9,7 +9,7 @@ Use this skill manually. Do not invoke it unless the user explicitly asks for a 
 
 Review the code after the implementation exists. Focus on issues that were hard to see upfront and only became obvious once the change touched real interfaces, control flow, state, tests, or module boundaries.
 
-This skill is for improvement-oriented design review after the real code exists. Prioritize actual design flaws, weak boundaries, ownership confusion, abstraction leaks, and structure or organization problems that will matter as the codebase grows. Prefer recommendations that materially improve a seam, file, module, or end-to-end concern once the code is real. Do not let change size alone veto a worthwhile recommendation, but also do not fill the review with tiny local tidy-ups that barely change maintenance cost or design clarity. If tradeoffs, uncertainty, or hidden constraints matter, surface them clearly.
+This skill is for improvement-oriented design review after the real code exists. Prioritize actual design flaws, weak boundaries, ownership confusion, abstraction leaks, overengineered code or structure, and organization problems that will matter as the codebase grows. Prefer recommendations that materially improve a seam, file, module, or end-to-end concern once the code is real. Do not let change size alone veto a worthwhile recommendation, but also do not fill the review with tiny local tidy-ups that barely change maintenance cost or design clarity. If tradeoffs, uncertainty, or hidden constraints matter, surface them clearly.
 
 It is still acceptable for the review to conclude that the implementation is fine. Do not invent a flaw just to produce feedback. If the code does not reveal a meaningful improvement, say plainly that there is nothing worth changing right now.
 
@@ -30,10 +30,10 @@ It is still acceptable for the review to conclude that the implementation is fin
 - Data is being reshaped repeatedly between layers.
 - Tests became hard to set up because dependencies or ownership are misplaced.
 - The implementation needed workarounds that will probably repeat.
-- The implementation introduced speculative structure that current behavior barely uses: extra fields, hooks, wrappers, options, or generic layers.
+- The implementation introduced speculative or overbuilt structure that current behavior barely uses: extra fields, hooks, wrappers, options, strategy objects, generic layers, or config surfaces.
 - One concern is now scattered across files or modules in a way that weakens discoverability.
 - The feature now feels too flat or mixed: readers must scan unrelated files or responsibilities to follow one concern.
-- The code technically works, but the implementation revealed a real boundary, ownership, or organization weakness that will keep taxing future changes.
+- The code technically works, but the implementation revealed a real boundary, ownership, organization, or overengineering weakness that will keep taxing future changes.
 
 3. Prefer credible improvements, not only obvious failures.
 - Do not recommend a refactor just because another design looks cleaner in theory.
@@ -62,6 +62,7 @@ Treat these as strong signals for a refactor recommendation:
 - One abstraction claims to hide complexity but instead leaks it to callers.
 - Ownership of data, side effects, or orchestration is ambiguous enough to create likely bugs.
 - The new code had to special-case around an existing interface in a way that will spread.
+- The implementation added wrappers, options, strategy points, generic types, or configuration that current behavior does not really need.
 - One concern is split across files or layers in a way that makes the code harder to navigate or evolve.
 - A module, file, or directory now mixes responsibilities that should probably be separated.
 - The current shape is workable, but a concrete refactor would noticeably reduce mental overhead or repeated explanation for future changes.
@@ -128,7 +129,8 @@ Use this structure when reporting:
 - Be direct and specific.
 - Prefer file-level, seam-level, module-level, or feature-flow observations over vague architectural commentary.
 - Do not force the user back into the editor just to follow the review.
-- Default toward surfacing actual design, abstraction, ownership, organization, and structure weaknesses that materially affect maintainability or future change paths.
+- Default toward surfacing actual design, abstraction, ownership, organization, structure, and overengineering weaknesses that materially affect maintainability or future change paths.
+- Check not only for missing structure but also for structure that is heavier than the current behavior justifies, and call out where it can be reduced.
 - Avoid padding the review with minor pre-fixes: tiny helper extraction, one-off naming polish, isolated local dedupe, or small logging niceties are usually not worth calling out unless they indicate a broader problem.
 - Do not treat code churn alone as a reason to avoid recommending a refactor.
 - Surface real tradeoffs when they exist.
@@ -150,12 +152,13 @@ Use the same posture here:
 - Do not remove structure that already improves naming, local reasoning, ownership boundaries, or filesystem-level comprehension.
 - Do not add nesting just because a directory has many files.
 - Treat readability-oriented helpers, small composed objects, and clear subdirectories as legitimate value even when they are single-use.
-- Prioritize structural findings that expose weak ownership, mixed responsibilities, scattered concerns, or directories/modules that no longer help readers predict where code lives.
+- Prioritize structural findings that expose weak ownership, mixed responsibilities, scattered concerns, overbuilt abstractions, or directories/modules that no longer help readers predict where code lives.
 - Recommend simplification or reorganization when the current shape adds recurring maintenance cost, obscures the real flow, or when a credible cleanup would materially improve ownership clarity.
 - Do not reject a structural recommendation just because the reorganization would touch many files; surface the cost and tradeoff instead.
 
 Treat these as strong signals:
 - A new field, option, or hook exists mostly for hypothetical future cases.
+- A wrapper, abstraction layer, strategy object, or config surface adds flexibility that current behavior does not use.
 - A helper or abstraction adds another jump without improving naming, boundaries, invariants, or reuse.
 - Callers still need to know internal details the abstraction claimed to hide.
 - One concept now requires repeated mapping or translation just to preserve genericity.

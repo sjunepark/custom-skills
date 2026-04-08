@@ -1,15 +1,15 @@
 ---
 name: post-implementation-review
-description: Review code after implementation work to identify design flaws, abstraction issues, maintenance risks, or structure problems that only became clear once real code was written. Use whenever the user asks whether a recent change exposed architectural problems, whether an abstraction is fighting the implementation, whether code now looks overengineered or too flat, or whether a refactor is justified. Prefer embedded snippets with file-path comments over editor-oriented file and line references. Be conservative and avoid suggesting refactors without concrete evidence of recurring cost or complexity.
+description: Review implemented code for design flaws, abstraction issues, structural problems, or refactors that only became clear in real code. Use when a recent change may have exposed architectural problems, over- or under-structure, or whether a refactor is worth doing now. Prefer embedded snippets with file-path comments over editor-oriented file and line references. Default toward credible design or readability improvements, call out real tradeoffs, and separate straightforward recommendations from items worth discussion.
 ---
 
 # Post-Implementation Review
 
-Review the code after the implementation exists. Focus on issues that were hard to see upfront and only became obvious once the change touched real interfaces, control flow, state, or tests.
+Review the code after the implementation exists. Focus on issues that were hard to see upfront and only became obvious once the change touched real interfaces, control flow, state, tests, or module boundaries.
 
-This skill is for cautious design review, not aggressive redesign. A strange-looking design is not enough on its own. Prefer keeping the current structure when the evidence is thin or when hidden constraints could plausibly explain the shape.
+This skill is for improvement-oriented design review after the real code exists. Default toward recommending a cleanup when the implementation reveals a credible design or readability improvement, even if the gain is modest or the refactor touches a fair amount of code. Do not let change size alone veto a recommendation. If tradeoffs, uncertainty, or hidden constraints matter, surface them clearly.
 
-It is acceptable for the review to conclude that the implementation is fine. Do not stretch minor discomfort into a flaw just to produce feedback. If the code does not reveal a meaningful design problem, say plainly that there is nothing wrong, nothing worth improving right now, or no post-implementation flaw in the previous implementation.
+It is still acceptable for the review to conclude that the implementation is fine. Do not invent a flaw just to produce feedback. If the code does not reveal a meaningful improvement, say plainly that there is nothing worth changing right now.
 
 ## Workflow
 
@@ -30,17 +30,22 @@ It is acceptable for the review to conclude that the implementation is fine. Do 
 - The implementation needed workarounds that will probably repeat.
 - The implementation introduced speculative structure that current behavior barely uses: extra fields, hooks, wrappers, options, or generic layers.
 - The feature now feels too flat or mixed: readers must scan unrelated files or responsibilities to follow one concern.
+- The code technically works, but a targeted refactor would make local reasoning, naming, ownership, or seam boundaries meaningfully clearer.
 
-3. Keep the refactor bar high.
+3. Prefer credible improvements, not only obvious failures.
 - Do not recommend a refactor just because another design looks cleaner in theory.
 - Do not treat unfamiliar code as broken code.
 - Assume there may be constraints you cannot yet see unless the code gives clear contrary evidence.
-- Suggest refactoring only when the current shape creates recurring cost, blocks straightforward extension, or makes correctness meaningfully harder to preserve.
+- Recommend a refactor when the implementation shows a solid improvement path for readability, boundaries, extension, or correctness, even if the current code still works.
+- Do not reject a worthwhile recommendation just because it touches many files. Discuss that cost when it matters, but size alone is not a veto.
 
-4. Separate evidence from recommendation.
+4. Separate evidence, recommendation, and decision level.
 - First state what the implementation revealed.
-- Then state whether that evidence is strong enough to justify action.
-- If the evidence is weak, say so directly and recommend leaving the design in place for now.
+- Then state whether there is a likely recommended path.
+- Classify every finding or recommendation into one of two buckets:
+  - `Bucket I — Straightforward / recommended`: likely has a clear answer or strongly recommended fix path; present briefly for awareness.
+  - `Bucket II — Worth discussing`: real tradeoffs, multiple plausible directions, unclear constraints, or technical decisions.
+- Use Bucket II for the items that deserve the user's attention.
 
 ## Review Standard
 
@@ -51,44 +56,52 @@ Treat these as strong signals for a refactor recommendation:
 - One abstraction claims to hide complexity but instead leaks it to callers.
 - Ownership of data, side effects, or orchestration is ambiguous enough to create likely bugs.
 - The new code had to special-case around an existing interface in a way that will spread.
+- Naming or control flow is now consistently awkward enough that a targeted cleanup would materially improve readability.
+- The current shape is workable, but a concrete refactor would noticeably reduce mental overhead or repeated explanation.
 
-Treat these as weak signals that usually do not justify a refactor by themselves:
+Treat these as weak signals that often do not justify action on their own:
 
-- The code feels inelegant but is still locally understandable.
+- The code feels a bit inelegant but is still locally understandable.
 - A helper or abstraction is slightly misnamed but still usable.
 - There is some duplication, but it is small and isolated.
 - The current design is awkward only for one edge case with no sign of repetition.
+
+If the evidence is weak, say so. A clean review is still valid.
 
 ## Output
 
 Use this structure when reporting:
 
-### Findings
-- List only concrete design or abstraction issues supported by the code.
-- For each issue, explain why it became visible after implementation rather than being obvious upfront.
-- Support each issue with a short embedded snippet when existing code is central to the point.
+### Bucket I — Straightforward / Recommended
+- Put findings or recommendations here when there is a likely answer or a strongly recommended path that probably does not need much user review.
+- Keep these concise.
+- For each item, include:
+  - what the implementation revealed
+  - why it became visible after implementation
+  - the recommended fix in short form
+  - the main cost or tradeoff only if it matters
+- Support with a short embedded snippet when existing code is central to the point.
+
+### Bucket II — Worth Discussing
+- Put findings or recommendations here when they involve real tradeoffs, technical decisions, hidden constraints, or multiple plausible directions.
+- For each item, include:
+  - what the implementation revealed
+  - why it became visible after implementation
+  - the main options or decision points
+  - the tradeoffs, risks, or uncertainty
+- Support with a short embedded snippet when existing code is central to the point.
 
 ### Keep As-Is
 - Call out odd-looking choices that should probably remain unchanged for now.
-- Explain what evidence is missing for a refactor recommendation.
-
-### Refactor Candidates
-- Include only changes that clear the bar above.
-- For each one, state:
-  - the smallest reasonable refactor or reorganization scope
-  - what it would improve
-  - what it would cost or risk
-  - why now is or is not the right time
-
-### Open Questions
-- List hidden constraints, ownership questions, or missing context that could change the recommendation.
+- Explain what evidence is missing for a change recommendation.
 
 ### Verdict
 - End with one of:
-  - `No refactor recommended`
-  - `Small targeted refactor is justified`
-  - `Broader redesign may be warranted, but only after clarifying constraints`
-- A clean review is a valid outcome. If no issue clears the bar, say that explicitly instead of forcing a finding.
+  - `No meaningful improvement identified`
+  - `Recommended targeted refactors, mostly straightforward`
+  - `Recommended changes include technical decisions`
+  - `Broader redesign may be warranted after clarifying constraints`
+- If Bucket I or Bucket II is empty, say so explicitly instead of implying hidden findings.
 
 ## Snippet Rules
 
@@ -104,9 +117,13 @@ Use this structure when reporting:
 - Be direct and specific.
 - Prefer file-level or seam-level observations over vague architectural commentary.
 - Do not force the user back into the editor just to follow the review.
-- If there are no meaningful design flaws, say so explicitly.
-- It is fine to say there is nothing wrong, nothing to improve, or no flaw exposed by the implementation.
-- If a concern is plausible but not yet well supported, label it as a watch item rather than a recommendation.
+- Default toward surfacing net-positive design or readability improvements, even when the gains are modest.
+- Do not treat code churn alone as a reason to avoid recommending a refactor.
+- Surface real tradeoffs when they exist.
+- Keep Bucket I concise so the user can scan past the obvious items quickly.
+- Put the user's attention on Bucket II.
+- If there are no meaningful design flaws or worthwhile improvements, say so explicitly.
+- If a concern is plausible but not yet well supported, put it in Bucket II or `Keep As-Is` rather than overstating confidence.
 - Do not manufacture findings to make the review feel useful.
 
 ## Structure and Complexity Concerns
@@ -117,11 +134,12 @@ Check structure in both directions:
 - Over-structure: extra fields, config keys, DTO properties, wrappers, extension points, strategy objects, mode switches, or mapping layers that current behavior does not meaningfully use.
 - Under-structure: flat directories mixing unrelated concerns, modules handling multiple capabilities at once, or related files scattered in ways that make one feature harder to follow.
 
-Keep the bar high:
+Use the same posture here:
 - Do not remove structure that already improves naming, local reasoning, ownership boundaries, or filesystem-level comprehension.
 - Do not add nesting just because a directory has many files.
 - Treat readability-oriented helpers, small composed objects, and clear subdirectories as legitimate value even when they are single-use.
-- Recommend simplification or reorganization only when the current shape adds recurring maintenance cost, obscures the real flow, or forces readers to scan unrelated code to follow one concern.
+- Recommend simplification or reorganization when the current shape adds recurring maintenance cost, obscures the real flow, or when a credible cleanup would materially improve readability or ownership clarity.
+- Do not reject a structural recommendation just because the reorganization would touch many files; surface the cost and tradeoff instead.
 
 Treat these as strong signals:
 - A new field, option, or hook exists mostly for hypothetical future cases.
@@ -129,6 +147,7 @@ Treat these as strong signals:
 - Callers still need to know internal details the abstraction claimed to hide.
 - One concept now requires repeated mapping or translation just to preserve genericity.
 - The filesystem or module layout no longer helps a reader predict where a concern lives.
+- A small or medium reorganization would make one concern much easier to follow end to end.
 
 Treat these as weak signals:
 - The code is a bit inelegant but still locally understandable.
@@ -137,9 +156,9 @@ Treat these as weak signals:
 - A flat directory is still small and each file name clearly signals its purpose.
 
 When these concerns matter, keep using the same report structure:
-- Put only code-supported structural issues in `Findings`.
+- Put straightforward structural fixes in `Bucket I — Straightforward / Recommended`.
+- Put structural items with meaningful tradeoffs or unclear boundaries in `Bucket II — Worth Discussing`.
 - Use `Keep As-Is` for structure that pays for itself now.
-- Use `Refactor Candidates` for the smallest worthwhile simplification or reorganization.
 - If the implementation is structurally fine, say so plainly.
 
 ## Example Triggers

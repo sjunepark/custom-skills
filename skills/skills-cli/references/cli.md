@@ -31,6 +31,7 @@ For this repository specifically:
 - Use `https://github.com/sjunepark/custom-skills/tree/main/skills` as the normal install source.
 - Prefer that GitHub subpath URL over `.` or `./skills` so installed skills can be updated across multiple machines without publishing repo-local `.agents/` or `.claude/` skills.
 - Use `./skills` only for local validation or unpublished work.
+- If you want to sync a just-edited skill using the GitHub `skills/` URL, commit and push first; otherwise the remote install will not contain the local changes.
 - The normal machine-global setup for this repo is Claude Code + Pi only: use `--copy -g -a claude-code -a pi`.
 - That copy-mode install writes directly to `~/.claude/skills/` and `~/.pi/agent/skills/` and keeps `skills list -g` reporting `Agents: Claude Code, Pi`.
 - Do not leave this repo's published machine-global installs in `~/.agents/skills/` unless the user explicitly wants universal multi-harness sharing.
@@ -46,11 +47,18 @@ bunx skills add https://github.com/sjunepark/custom-skills/tree/main/skills --li
 
 ### Add one published repo skill to Claude Code + Pi globally
 
+Commit and push first if the skill was just edited locally.
+
 ```bash
+git add skills/<skill-name>
+git commit -m "update <skill-name>"
+git push origin main
 bunx skills add https://github.com/sjunepark/custom-skills/tree/main/skills --skill <skill-name> --copy -g -a claude-code -a pi -y
 ```
 
 ### Add every published repo skill to Claude Code + Pi globally
+
+Commit and push first if the published repo skills were edited locally and those edits should be included in the reinstall.
 
 ```bash
 bunx skills add https://github.com/sjunepark/custom-skills/tree/main/skills --all --copy -g -a claude-code -a pi -y

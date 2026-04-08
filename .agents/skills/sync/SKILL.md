@@ -16,16 +16,20 @@ Always use the skills CLI. Do not install from `.` or `./skills`.
 - If `origin` is missing, stop and tell the user you need a remote URL for this repo.
 - For this repository, convert the remote into the GitHub `skills/` subpath: `https://github.com/sjunepark/custom-skills/tree/main/skills`.
 
-2. Inspect the remote skill source before installing.
+2. Make sure the remote contains the intended version.
+- If the user just edited skills locally and wants those edits included in the sync, tell them to commit and push first.
+- Do not sync from the remote URL while the desired changes exist only in the working tree.
+
+3. Inspect the remote skill source before installing.
 - Run `bunx skills add "<skills-subpath-url>" --list`.
 - Confirm the remote resolves and exposes only the published skills from `skills/`.
 
-3. Install every skill from the remote source.
+4. Install every skill from the remote source.
 - For this repo's normal machine-global setup, target Claude Code + Pi with copy mode: `bunx skills add "<skills-subpath-url>" --all --copy -g -a claude-code -a pi -y`.
 - Use shared `~/.agents/skills` installs only when the user explicitly wants universal multi-harness sharing.
 - If the user asks for a project install instead, omit `-g` and only narrow agents if requested.
 
-4. Verify the result.
+5. Verify the result.
 - Run `bunx skills list` for project scope or `bunx skills list -g` for global scope.
 - For the normal machine-global setup, confirm the listing shows `Agents: Claude Code, Pi`, not a broad shared-agent set.
 - Report that the installed skills now come from the remote-backed source, not the local working tree.
@@ -33,6 +37,7 @@ Always use the skills CLI. Do not install from `.` or `./skills`.
 ## Guardrails
 
 - Use the current repo's GitHub `skills/` subpath URL, not a filesystem path and not the repo root URL.
+- If the desired skill changes are only local, stop and ask the user to commit and push before syncing from the remote URL.
 - Prefer the canonical published source `https://github.com/sjunepark/custom-skills/tree/main/skills` for this repo.
 - Default to installing for Claude Code + Pi with `--copy` unless the user explicitly wants another target set.
 - If the user wants `skills list -g` to stay scoped to Claude Code + Pi, do not leave this repo's published skills in `~/.agents/skills`.

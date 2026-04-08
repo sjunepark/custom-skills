@@ -22,6 +22,7 @@
 - Validate this repo as a local source with `bunx skills add ./skills --list`.
 - Validate one skill directly with `bunx skills add ./skills/<skill-name> --list`.
 - For installs on individual machines, use the GitHub `skills/` subpath so updates can flow across machines without publishing repo-local `.agents/` and `.claude/` skills.
+- If a skill change should be synced or reinstalled from the remote URL, commit and push that change first, then run the remote-URL `bunx skills add ...` command. Do not reinstall from the remote before the relevant commit is published.
 - For this repo's normal machine-global setup, install directly to Claude Code + Pi with copy mode so `bunx skills list -g` shows `Agents: Claude Code, Pi`: `bunx skills add https://github.com/sjunepark/custom-skills/tree/main/skills --all --copy -g -a claude-code -a pi -y`.
 - To install one published repo skill for the same setup, use: `bunx skills add https://github.com/sjunepark/custom-skills/tree/main/skills --skill <skill-name> --copy -g -a claude-code -a pi -y`.
 - Do not leave this repo's published machine-global installs under `~/.agents/skills` unless the user explicitly wants universal multi-harness sharing; that shared path makes `bunx skills list -g` report many agents.
@@ -34,6 +35,7 @@
 ## Editing expectations
 - Prefer editing an existing skill in place over adding new top-level conventions.
 - When a skill's behavior changes, update `SKILL.md` and any referenced files in the same change.
+- When the goal is to sync that changed skill onto a machine, tell the user to commit and push first so the GitHub `skills/` URL can be used for the install.
 - Keep skill instructions concise, executable, and tool-facing.
 - Prefer exact commands and concrete paths over generic guidance.
 

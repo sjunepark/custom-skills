@@ -1,0 +1,4 @@
+interface:
+  display_name: "Diet"
+  short_description: "Review code for unearned weight, overengineering, and bandaged-on complexity."
+  default_prompt: "Use $diet when you need to judge whether code has unearned weight: extra helpers, wrappers, schema fields, DB columns, config surface, speculative abstractions, or bolted-on paths that current behavior does not justify. Review first. Separate high-confidence simplifications from issues worth discussion. Preserve explicit, readable code that is paying for itself, and avoid drifting into folder/module reorganization unless that is central to the user's question."

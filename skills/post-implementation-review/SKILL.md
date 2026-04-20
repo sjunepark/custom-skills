@@ -87,7 +87,8 @@ Use this structure when reporting:
 - Put findings or recommendations here when there is a likely answer or a strongly recommended path that probably does not need much user review.
 - Keep these concise.
 - Use Bucket I for materially worthwhile fixes, not for every plausible tidy-up.
-- For each item, include:
+- Number the items in this bucket (`1.`, `2.`, `3.`). Do not use unordered bullets for the primary items.
+- For each numbered item, include:
   - what the implementation revealed
   - why it became visible after implementation
   - the recommended fix in short form
@@ -96,7 +97,8 @@ Use this structure when reporting:
 
 ### Bucket II — Worth Discussing
 - Put findings or recommendations here when they involve real tradeoffs, technical decisions, hidden constraints, or multiple plausible directions.
-- For each item, include:
+- Number the items in this bucket (`1.`, `2.`, `3.`). Do not use unordered bullets for the primary items.
+- For each numbered item, include:
   - what the implementation revealed
   - why it became visible after implementation
   - the main options or decision points
@@ -105,6 +107,7 @@ Use this structure when reporting:
 
 ### Keep As-Is
 - Call out odd-looking choices that should probably remain unchanged for now.
+- If this section has multiple items, number them too.
 - Explain what evidence is missing for a change recommendation.
 
 ### Verdict
@@ -136,6 +139,7 @@ Use this structure when reporting:
 - Surface real tradeoffs when they exist.
 - Keep Bucket I concise so the user can scan past the obvious items quickly.
 - Put the user's attention on Bucket II.
+- Within each populated bucket, use numbered primary items so the hierarchy stays visually clear.
 - If there are no meaningful design flaws or worthwhile improvements, say so explicitly.
 - If a concern is plausible but not yet well supported, put it in Bucket II or `Keep As-Is` rather than overstating confidence.
 - Do not manufacture findings to make the review feel useful.

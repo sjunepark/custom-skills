@@ -1,6 +1,6 @@
 ---
 name: learning-material-writer
-description: Create or update repo learning material under `docs/learning` for readers who are new to the codebase but already know programming. Use only when the user explicitly asks for learning material, onboarding docs, a codebase guide, a repo handbook, or `docs/learning` content. Default to the whole repository unless the user scopes the request more narrowly.
+description: Create or update repo learning material under `docs/learning` for readers who are new to the codebase but already know programming. Treat that material as onboarding guidance, not the project's source of truth for implementation behavior or decisions. Use only when the user explicitly asks for learning material, onboarding docs, a codebase guide, a repo handbook, or `docs/learning` content. Default to the whole repository unless the user scopes the request more narrowly.
 ---
 
 # Learning Material Writer
@@ -9,6 +9,8 @@ Write concise learning material that helps a programmer become fluent in an unfa
 
 The difference is output shape: instead of replying with one lesson in chat, create a navigable document set inside `docs/learning`.
 
+Learning material is for orientation and onboarding. It must not present itself as the repository's authoritative source for implementation truth, product decisions, or development policy.
+
 ## Defaults
 
 - Default scope to the whole repository.
@@ -16,6 +18,17 @@ The difference is output shape: instead of replying with one lesson in chat, cre
 - Assume the reader is new to this repo, but not new to programming.
 - Write fast-reading docs: concise, concrete, and skimmable.
 - Prefer stable design explanation over implementation trivia.
+- Treat learning docs as secondary guidance that points readers toward more authoritative sources when needed.
+
+## Documentation Status
+
+- Make it explicit that `docs/learning` is for onboarding and reader understanding.
+- Do not frame learning docs as the source of truth for implementation behavior, decision-making, or project policy.
+- In `docs/learning/INDEX.md`, include a short note telling readers to defer to more authoritative sources when accuracy or current behavior matters.
+- If the repository already has a suitable project-level surface such as `AGENTS.md`, `README.md`, `docs/INDEX.md`, or another docs index, update that surface when needed so the role of `docs/learning` is obvious there too.
+- Prefer short notes in existing index, documentation-role, or contribution sections over adding a large new policy block.
+- Do not create a brand-new top-level file just to carry this note unless the user asked for that.
+- Point readers to the best available canonical sources for the repo, such as source code, tests, architecture docs, ADRs, API contracts, or product requirements.
 
 ## Workflow
 
@@ -151,6 +164,7 @@ Good page openings:
 `docs/learning/INDEX.md` should usually include:
 
 - what this learning set is for
+- a short note that it is onboarding material, not the authoritative source of truth for implementation or decisions
 - the recommended reading path
 - a short map of the major topic pages and directories
 - one-line descriptions for each linked page
@@ -164,6 +178,7 @@ If `docs/learning` already exists:
 - refactor weak hierarchy when needed so navigation becomes clearer
 - merge redundant pages
 - add missing index pages or cross-links
+- add or tighten the onboarding-only / not-source-of-truth note if it is missing or vague
 - keep filenames stable unless renaming materially improves the table-of-contents effect
 
 ## Non-Goals
@@ -171,6 +186,7 @@ If `docs/learning` already exists:
 Do not:
 - write long-form tutorials or exercises
 - mirror every implementation detail in the repo
+- present learning docs as normative project policy or the decision record
 - create architecture docs outside `docs/learning` unless the user asked for that too
 - turn this into a code review or rewrite plan
 - speculate about intent when the code does not support it
@@ -179,5 +195,6 @@ Do not:
 
 When doing the work:
 - create or update files directly under `docs/learning`
+- when a suitable repo-level documentation surface already exists, update it too if needed so the onboarding-only role of `docs/learning` is explicit
 - briefly explain the chosen hierarchy before or after the edits
 - call out any important gaps where code structure was too unclear to document confidently
